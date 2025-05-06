@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Creator: CorelDRAW 2020 (64-Bit) -->
+
+<svg
+   xml:space="preserve"
+   width="934px"
+   height="931px"
+   version="1.1"
+   style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+   viewBox="0 0 933.17 930.05"
+   id="svg4"
+   sodipodi:docname="exptracker.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+   id="namedview4"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   inkscape:zoom="0.41648822"
+   inkscape:cx="465.79949"
+   inkscape:cy="464.59897"
+   inkscape:window-width="1360"
+   inkscape:window-height="705"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_x0020_1" />
+ <defs
+   id="defs1">
+  <font
+   id="FontID0"
+   horiz-adv-x="637"
+   font-variant="normal"
+   style="fill-rule:nonzero"
+   font-style="normal"
+   font-weight="400">
+	<font-face
+   font-family="Franklin Gothic Heavy"
+   id="font-face1">
+		<font-face-src>
+			<font-face-name
+   name="Franklin Gothic Heavy" />
+		</font-face-src>
+	</font-face>
+   <missing-glyph
+   id="missing-glyph1"><path
+     d="M0 0z"
+     id="path1" /></missing-glyph>
+   <glyph
+   unicode="$"
+   horiz-adv-x="586"
+   d="M237.997 651.995l0 83.9965 93.9984 0 0 -81.997c105.168,-11.6659 173.835,-61.8321 206.001,-150.167l-152.999 -47.8312c-15.6693,41.3318 -47.5002,61.9977 -95.5013,61.9977 -40.3342,0 -60.4991,-12.9989 -60.4991,-38.9968 0,-9.50091 3.5024,-17.4989 10.3329,-24.1683 6.8349,-6.66501 25.6668,-13.33 56.6656,-20.1649 70.6665,-15.1683 121.334,-28.8338 152.001,-41.0007 30.6634,-12.3324 56.1647,-32.9983 76.4995,-62.1675 20.3305,-29.1649 30.4979,-63.4962 30.4979,-103.329 0,-55.6681 -19.8338,-102.332 -59.3316,-140 -39.6677,-37.6638 -94.1683,-60.3336 -163.667,-68.1661l0 -84.0009 -93.9984 0 0 84.0009c-117.666,14.0009 -191.665,76.1684 -221.997,186.167l170.999 31.8309c14.6674,-50.0006 51.4992,-75.001 110.665,-75.001 46.1672,0 69.3335,12.6679 69.3335,38.0036 0,13.33 -5.33636,23.8329 -16.1659,31.1644 -10.6684,7.5014 -29.8357,14.0009 -57.1666,19.6683 -107.503,21.6635 -175.669,49.4997 -204.498,83.33 -28.8338,33.8347 -43.1657,72.8316 -43.1657,116.668 0,48.4977 15.8305,91.4979 47.3303,129.162 31.6653,37.5027 79.832,61.17 144.666,71.0019z"
+   id="glyph1" />
+  </font>
+  <style
+   type="text/css"
+   id="style1">
+   <![CDATA[
+    @font-face { font-family:"Franklin Gothic Heavy";font-variant:normal;font-style:normal;font-weight:normal;src:url("#FontID0") format(svg)}
+    .str1 {stroke:#AFF9CD;stroke-width:41.61;stroke-miterlimit:22.9256}
+    .str0 {stroke:#AFF9CD;stroke-width:41.61;stroke-linecap:square;stroke-miterlimit:1.05116}
+    .fil1 {fill:#00B551}
+    .fil3 {fill:#02612A}
+    .fil4 {fill:#03943D}
+    .fil2 {fill:#08823B}
+    .fil0 {fill:#AFF9CD}
+    .fnt0 {font-weight:normal;font-size:270.78px;font-family:'Franklin Gothic Heavy'}
+   ]]>
+  </style>
+ 
+   
+   
+   
+   
+   
+  </defs>
+ <g
+   id="Layer_x0020_1"
+   inkscape:label="Layer 1">
+  <metadata
+   id="CorelCorpID_0Corel-Layer" />
+  <g
+   id="g1"
+   transform="matrix(1.3124812,0,0,1.3124812,-147.37608,-143.1845)"><path
+     class="fil1 str0"
+     d="m 785.39,353.59 c 11.08,33.05 17.09,68.42 17.09,105.2 0,179.96 -143.7,326.36 -322.61,330.72 l -3.83,-173.08 c -3.01,0.06 153.27,-9.34 153.27,-157.64 0,-18.23 -2.85,-35.2 -8.01,-50.75 l -0.01,-0.01 z"
+     id="path2"
+     style="stroke:#ffffff;stroke-opacity:1" /><path
+     class="fil2 str1"
+     d="M 621.29,408.03 785.65,353.51 C 728.12,180.09 540.91,86.15 367.49,143.67 194.07,201.2 100.13,388.41 157.65,561.83 l 0.42,-0.14 c -9.85,-30.14 -15.52,-62.22 -16.26,-95.57 -1.69,-76.57 22.78,-147.65 65.22,-204.67 l 136.51,104.33 c 18.73,-26.16 45.6,-46.84 78.47,-57.75 82.65,-27.41 171.86,17.36 199.28,100 z"
+     id="path3"
+     style="stroke:#ffffff;stroke-width:41.61;stroke-dasharray:none;stroke-opacity:1" /><path
+     class="fil3 str1"
+     d="m 207.03,261.45 c -42.44,57.02 -66.91,128.1 -65.22,204.67 4.04,182.67 155.39,327.47 338.06,323.43 l -3.83,-173.12 c -87.05,1.92 -159.18,-67.08 -161.1,-154.14 -0.79,-35.66 10.32,-68.81 29.71,-95.66 z"
+     id="path4"
+     style="stroke:#ffffff;stroke-opacity:1" /><text
+     x="389.28"
+     y="556.01001"
+     class="fil4 fnt0"
+     id="text4">$</text></g>
+ </g>
+</svg>

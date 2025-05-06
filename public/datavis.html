@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .chart-container { display: flex; gap: 40px; width: 100%; max-width: 800px; }
+        canvas { max-width: 100%; height: auto; }
+    </style> -->
+</head>
+<body>
+    <h2>Dynamic Charts</h2>
+    <div class="input-group">
+        <input type="text" id="labelInput" placeholder="Label">
+        <input type="number" id="valueInput" placeholder="Value">
+        <button onclick="addData()">Add</button>
+    </div>
+
+    <div class="chart-container">
+        <div>
+            <h3>Bar Chart</h3>
+            <canvas id="barChart"></canvas>
+        </div>
+        <div>
+            <h3>Pie Chart</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+
+    <script src="datavis.js"></script>
+
+    
+</body>
+</html>

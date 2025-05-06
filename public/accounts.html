@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - Accounts</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/accounts.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="main_container">
+        <div class="navbar">
+            <div class="navlogo">
+                <img class="navsvg" src="img/exptracker.svg" alt="">
+                <img class="navsvglogo" src="img/logo2.svg" alt="">
+              </div>
+            <nav class="_nav">
+                <ul class="menu">
+                    <!-- <li style="background-color: #132222;"><img class="navsvg" src="exptracker.svg" alt=""></li> -->
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li><a href="report.html">Report</a></li>
+                    <li><a href="statistics.html">Statistics</a></li>
+                    <li class="active"><a href="accounts.html">Accounts</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="menuwire">
+            <div class="heading">
+                <h2>Account Management</h2>
+            </div>
+
+            <div class="container">
+                <div class="accounts-grid">
+                    <div class="account-card">
+                        <h3>Total Balance</h3>
+                        <p class="account-value money money-plus" id="totalBalance">₹0.00</p>
+                        <div class="account-change" id="balanceChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="account-card">
+                        <h3>Total Income</h3>
+                        <p class="account-value money money-plus" id="totalIncome">₹0.00</p>
+                        <div class="account-change" id="incomeChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="account-card">
+                        <h3>Total Expenses</h3>
+                        <p class="account-value money money-minus" id="totalExpenses">₹0.00</p>
+                        <div class="account-change" id="expensesChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="account-card">
+                        <h3>Savings</h3>
+                        <p class="account-value money money-plus" id="totalSavings">₹0.00</p>
+                        <div class="account-change" id="savingsChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accounts-section">
+                    <div class="accounts-header">
+                        <h3>Your Accounts</h3>
+                        <button class="add-account-btn">+ Add Account</button>
+                    </div>
+                    <div class="accounts-list" id="accountsList">
+                        <!-- Account items will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="transaction-history">
+                    <h3>Recent Transactions</h3>
+                    <div class="transaction-list" id="transactionList">
+                        <!-- Transaction items will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="account-charts">
+                    <div class="chart-card">
+                        <h3>Account Distribution</h3>
+                        <canvas id="accountDistributionChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Monthly Overview</h3>
+                        <canvas id="monthlyOverviewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/accounts.js"></script>
+</body>
+</html> 

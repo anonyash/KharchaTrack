@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="main_container">
+<!--       
+      <div class="add_btn1">
+        <section style="height: fit-content;    width: fit-content;"><img id="img1"  src="addincome.svg"/></section>
+        
+        
+        
+      </div>
+      <div class="add_btn2">
+        
+        <section style="height: fit-content;    width: fit-content;"><img id="img2"  src="addexpense.svg"/></section>
+        
+        
+      </div> -->
+      
+
+      <div class="navbar">
+        <div class="navlogo">
+          <img class="navsvg" src="img/exptracker.svg" alt="">
+          <img class="navsvglogo" src="img/logo2.svg" alt="">
+        </div>
+        <nav  class="_nav">
+            <ul class="menu">
+                
+                
+                <li class="active"><a href="index.html">Dashboard</a></li>
+                <li ><a href="report.html">Report</a></li>
+                <li ><a href="statistics.html">Statistics</a></li>
+                <li ><a href="accounts.html">Accounts</a></li>
+                <li ><a href="settings.html">Settings</a></li>
+                <!-- <li ><a href="projects.html">Projects</a></li>
+                <li ><a href="about.html">About</a></li> -->
+            </ul>
+            <!-- <div id="btns" class="btnns">
+              <div>
+              <label id="inc" for="incom" class="btn"><p class="p1">Income</p><img class="img2"  src="addincome.svg"/></label>
+            </div>
+            <div>
+              <label id="exp" for="expen" class="btn"><img class="img2"  src="addexpense.svg"/>Expense</label>
+            </div>
+              </div>
+            <div class="logo"></div> -->
+        </nav>
+      </div>
+
+      <div class="menuwire">
+    <div class="heading"> 
+    <h2>Expense Tracker</h2>
+    </div>
+    <!-- link this add exp/inc feature to a button -->
+    <div class="container">
+      <div>
+      <div class="bal">
+        <h4>Your Balance</h4>
+        <h1 id="balance">₹0.00</h1>
+        <div class="inc-exp-container">
+          <div>
+            <h4>Income</h4>
+            <p id="money-plus" class="money-plus">
+              +₹0.00
+            </p>
+          </div>
+          <div>
+            <h4>Expense</h4>
+            <p id="money-minus" class="money-minus">
+              -₹0.00
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="his">
+        <h3>History</h3>
+        <ul id="list" class="list">
+          <!-- <li class="minus">
+            Cash <span>-₹400</span
+            ><button class="delete-btn">x</button>
+          </li> -->
+        </ul>
+        </div>
+      </div>
+
+     
+      
+      
+            
+      <div class="transdiv">  
+        <input type="radio" name="section" id="incom" onclick="toggl()" checked="checked">
+      <input type="radio" name="section" id="expen" onclick="toggl()">  
+        <div id="btns" class="btnns">
+          <h3>Add new transaction</h3>
+            <div class="addbtns">
+              <label id="inc" for="incom" class="btn">Add Income</label>
+              <label id="exp" for="expen" class="btn">Add Expense</label>
+            </div>
+        </div>
+      <div  class="form">
+      <form class="d" id="form">
+        <div class="form-control">
+          <label for="amount">Amount <br> </label>
+          <input type="number" id="amount" placeholder="Enter amount..."> 
+
+          <div  id="inco" class="form-control">
+              <label for="text0">Category</label>
+              <div style="display: flex; flex-direction: column; gap: 5px; justify-content: space-between;">
+              <input type="text" id="text0" class="categorytext" placeholder="Enter Category...."/>
+              <select id="category0" class="category">
+                <option value="1">Custom category</option>
+                <option value="Salary">Salary</option>
+                <option value="Gift">Gift</option>
+                <option value="Refund">Refund</option>
+                <option value="Bonus">Bonus</option>
+            </select>
+              </div>
+          </div>
+
+
+          <div  id="expe" class="form-control" >
+            <label for="text1">Category</label>
+            <div style="display: flex; flex-direction:column ; gap: 5px; justify-content: space-between;">
+            <input type="text" id="text1" class="categorytext" placeholder="Enter Category...."/>
+            <select id="category1" class="category">
+              <option value="1">Custom category</option>
+              <optgroup label="essentials">
+              <option value="Groceries">Groceries</option>
+              <option value="Food">Food</option>
+              <option value="Rent">Rent</option>
+              <option value="Transport">Transport</option>
+              </optgroup>
+              <optgroup label="personal">
+              <option value="Shopping">Shopping</option>
+              <option value="Dining out">Dining out</option>
+                </optgroup>
+          </select>
+            </div>
+        </div>
+
+
+          <div class="form-control">
+              <label for="transaction-currency">Currency</label>
+              <select id="transaction-currency">
+                  <option value="INR">INR (₹)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="JPY">JPY (¥)</option>
+                  <option value="CAD">CAD (C$)</option>
+                  <option value="CHF">CHF (Fr)</option>
+                  <option value="CNY">CNY (¥)</option>
+              </select>
+          </div>
+          
+          </div>
+          <button type="submit" class="btn">Add transaction</button>
+          
+      </form>
+      </div>
+      </div>  
+      <div class="chart-container">
+        <!-- <div>
+            <h3>Bar Chart</h3>
+            <canvas id="barChart"></canvas>
+        </div> -->
+        <div>
+            <h3>Pie Chart</h3>
+            <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+    
+    </div>
+    
+    
+
+    </div>
+    
+    </div>
+    <!-- JavaYscript Project  -->
+    <!-- <script src="settings.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <script  src="js/script.js"></script>
+     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+     <!-- <script src="settings.js"></script> -->
+    
+    
+    
+    <!-- <script src="currency-converter/script.js"></script> -->
+    <!-- <script src="datavis.js"></script> -->
+    
+  </body>
+</html>

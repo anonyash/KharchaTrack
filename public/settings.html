@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings - Expense Tracker</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="main_container">
+      <div class="navbar">
+        <div class="navlogo">
+          <img class="navsvg" src="img/exptracker.svg" alt="">
+          <img class="navsvglogo" src="img/logo2.svg" alt="">
+        </div>
+        <nav class="_nav">
+          <ul class="menu">
+            <!-- <li style="background-color: #132222;"><img class="navsvg" src="exptracker.svg" alt=""></li> -->
+            <li><a href="index.html">Dashboard</a></li>
+            <li ><a href="report.html">Report</a></li>
+            <li><a href="statistics.html">Statistics</a></li>
+            <li><a href="accounts.html">Accounts</a></li>
+            <li class="active"><a href="settings.html">Settings</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="menuwire">
+        <div class="heading">
+          <h2>Settings</h2>
+        </div>
+
+        <div class="settings-container">
+          <div class="settings-section">
+            <h3>Currency Settings</h3>
+            <div class="form-control">
+              <label for="default-currency">Display Currency</label><!--Actual Default Currency check settings.js:1-->
+              <select id="default-currency">
+                <option value="INR">INR (₹)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="JPY">JPY (¥)</option>
+                <option value="CAD">CAD (C$)</option>
+                <option value="CHF">CHF (Fr)</option>
+                <option value="CNY">CNY (¥)</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label for="currency-select">Default Currency</label><!--Actual Display Currency check settings.js:1-->
+              <select id="currency-select" disabled>
+                <option selected value="INR">INR (₹)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="JPY">JPY (¥)</option>
+                <option value="CAD">CAD (C$)</option>
+                <option value="CHF">CHF (Fr)</option>
+                <option value="CNY">CNY (¥)</option>
+              </select>
+            </div>
+          <div style=" height: 5px; margin: 0px; padding:0px ;">
+            <h1 id="error" style="font-size: x-small; white-space: pre-line; font-family: system-ui;  color: #643331; font-style: italic;">
+              
+            </h1></div>
+            <button id="update-rates-btn" class="update-rates-btn">Update Exchange Rates</button>
+            <h1 id="date" style="font-size: x-small; white-space: pre-line; font-family: system-ui;  color: #316064; font-style: italic;">
+              Rates last updated: 
+            </h1>
+            <button style="align-self: flex-end;" id="save-currency" class="btn">Save Currency Settings</button>
+          </div>
+
+          <div class="settings-section">
+            <h3>Theme Settings</h3>
+            <div class="form-control">
+              <label for="theme-select">Select Theme</label>
+              <select id="theme-select">
+                <option value="dark">Dark Theme</option>
+                <option value="light">Light Theme</option>
+              </select>
+            </div>
+            <button style="align-self: flex-end;" id="save-theme" class="btn">Save Theme Settings</button>
+          </div>
+
+          <div class="settings-section">
+            <h3>Data Management</h3>
+            <button id="export-data" class="btn">Export Data</button>
+            <button id="import-data" class="btn">Import Data</button>
+            <button style="align-self: flex-end;" id="clear-data" class="btn danger">Clear All Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <script src="script.js"></script> -->
+    <script src="js/settings.js"></script>
+    <!-- <script src="script.js"></script> -->
+  </body>
+</html> 
