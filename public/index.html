@@ -8,6 +8,7 @@
     />
     
     <title>Expense Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
@@ -54,6 +55,25 @@
               </div>
             <div class="logo"></div> -->
         </nav>
+        <div class="acunt">
+          
+          <img class="usrlogo" src="img/userlogo.svg" style="height: 60px; width: 60px; padding-top: 5px;" alt="">
+          <!-- <a ></a> -->
+           <div class="dropdown">
+           <button id="abtn" ></button>
+           <label  id="accntbtn" tabindex="0">Account</label>
+           <div id="dropdownmenu" class="dropdowncont">
+            <div class="dropdownitem" id="login">Login</div>
+            <div class="dropdownitem" id="logout">Logout</div>
+           </div>
+           
+           </div>
+
+
+           
+          <!-- <img class="navsvglogo" src="img/logo2.svg" alt=""> -->
+
+        </div>
       </div>
 
       <div class="menuwire">
@@ -147,6 +167,15 @@
             </div>
         </div>
 
+        <div  id="tdate2" class="form-control" >
+          <label   for="calendar">Date</label>
+          <div style="display: flex; flex-direction:column ; gap: 5px; justify-content: space-between;">
+          <input style="padding: 10px;" type="text" class="calendar" id="calendar"  placeholder="pick a date...."/>
+          <input style="padding: 10px;" type="text" class="timepicker" id="timepicker"  placeholder="select time...."/>
+
+          </div>
+      </div>
+
 
           <div class="form-control">
               <label for="transaction-currency">Currency</label>
@@ -167,8 +196,63 @@
           
       </form>
       </div>
-      </div>  
-      <div class="chart-container">
+      </div>
+<!--       
+      
+        <div class="flatpickr-months">
+          <span class="flatpickr-prev-month">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z"></path></svg>
+          </span>
+          <div class="flatpickr-month">
+            <div class="flatpickr-current-month">
+              <select class="flatpickr-monthDropdown-months" aria-label="Month" tabindex="-1">
+                <option class="flatpickr-monthDropdown-month" value="0" tabindex="-1">January</option>
+                <option class="flatpickr-monthDropdown-month" value="1" tabindex="-1">February</option>
+                <option class="flatpickr-monthDropdown-month" value="2" tabindex="-1">March</option>
+                <option class="flatpickr-monthDropdown-month" value="3" tabindex="-1">April</option>
+                <option class="flatpickr-monthDropdown-month" value="4" tabindex="-1">May</option>
+                <option class="flatpickr-monthDropdown-month" value="5" tabindex="-1">June</option>
+                <option class="flatpickr-monthDropdown-month" value="6" tabindex="-1">July</option>
+                <option class="flatpickr-monthDropdown-month" value="7" tabindex="-1">August</option>
+                <option class="flatpickr-monthDropdown-month" value="8" tabindex="-1">September</option>
+                <option class="flatpickr-monthDropdown-month" value="9" tabindex="-1">October</option>
+                <option class="flatpickr-monthDropdown-month" value="10" tabindex="-1">November</option>
+                <option class="flatpickr-monthDropdown-month" value="11" tabindex="-1">December</option>
+              </select>
+              <div class="numInputWrapper">
+                <input class="numInput cur-year" type="number" tabindex="-1" aria-label="Year">
+                <span class="arrowUp"></span>
+                <span class="arrowDown"></span>
+              </div>
+            </div>
+          </div>
+          <span class="flatpickr-next-month"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z"></path></svg></span>
+        </div> -->
+      
+
+    <div style="min-width: 350px;">
+      <div class="monthcontainer">
+      <div class="month-header" style="display: flex;justify-content: space-between;align-items: center;background-color:#1c3638;">
+        <div><button id="prevMonth" >‹</button></div>
+        <div><span id="currentMonth" style="padding: 10px;"></span></div>
+        <div><button id="nextMonth" >›</button></div>
+        <div><button id="filterButton" >≡</button></div>
+        
+        
+        
+      </div>
+      <div id="transactionsContainer" style="padding-top: 15px; display: flex ; flex-direction: column;">
+        <!-- <ul id="list2" class="list">
+           <li class="minus">
+            Cash <span>-₹400</span
+            ><button class="delete-btn">x</button>
+          </li> 
+        </ul> -->
+
+      </div>
+    </div>
+      
+      <div class="chart-container" style="display: none;">
         <!-- <div>
             <h3>Bar Chart</h3>
             <canvas id="barChart"></canvas>
@@ -178,6 +262,7 @@
             <canvas id="pieChart"></canvas>
         </div>
       </div>
+    </div>
     
     </div>
     
@@ -188,6 +273,7 @@
     </div>
     <!-- JavaYscript Project  -->
     <!-- <script src="settings.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
      <script  src="js/script.js"></script>
      <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->

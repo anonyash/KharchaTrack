@@ -10,8 +10,11 @@ const balance = document.getElementById(
     "money-minus"
   );
   const list = document.getElementById("list");
+  const list2 = document.getElementById("list2");
   const form = document.getElementById("form");
   let text = {value:""};
+  let tdate = document.getElementById('calendar')
+  let ttime = document.getElementById('timepicker')
   const amount = document.getElementById("amount");
   // const dummyTransactions = [
   //   { id: 1, text: "Flower", amount: -20 },
@@ -21,13 +24,68 @@ const balance = document.getElementById(
   // ];
   
   // let transactions = dummyTransactions;
+
+let userId = localStorage.getItem('userId')
+console.log('userId: ', userId)
+// userdata(userId)
+if (!userId){
+  console.log("user id is ", userId)
+  let logout2 = document.getElementById('logout')
+  logout2.id = "logout2"
+
+}else{
+  console.log("user id is ", userId)
+  let login2 = document.getElementById('login')
+  login2.id = "login2"
+  
+}
+
+
+// async function userdata(userid){
+//   console.log(userid)
+//   let id = userid
+//   const response = await fetch('http://localhost:3000/api/user-data', {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({ id: id })
+//     // body: JSON.stringify({ fullName, email, password })
+// });
+
+// console.log('res: ',response)
+// let transactions = await response.json();
+// console.log('data: ',transactions)
+
+// if (response.ok) {
+//   console.log("response OK")
+//   console.log(response)
+//   // Store the token
+//   let trxns = JSON.stringify(transactions)
+//   localStorage.setItem('transactions', trxns)
+//   // localStorage.setItem('token', data.token);
+//   // localStorage.setItem('userId', data.userId);
+//   // Redirect to dashboard or home page
+//   // window.location.href = 'index.html';
+// } else {
+//   alert(data.message || 'failed to load transactions');
+// }
+
+// }
+
+
+
+
+
   
   //last 
   // localStorage.setItem('selectedCurrency', currentCurrency);
   const localStorageTransactions = JSON.parse(localStorage.getItem('transactions'));
   
   let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : [];
+  console.log(transactions)
   
+  let username = localStorage.getItem('aname') ;
   //5
   let cur = "₹" //   "$"    "₹"
 
@@ -41,7 +99,12 @@ const balance = document.getElementById(
   let sig2
   let categorytext = document.getElementsByClassName('categorytext')
   let category = document.getElementsByClassName("category")
+  const bttn = document.getElementById('accntbtn');
+  const menu = document.getElementById('dropdownmenu');
+  const logoutbtn = document.getElementById('logout') || document.getElementById('logout2');
+  const loginbtn = document.getElementById('login') || document.getElementById('login2');
 
+  console.log('username: ',username)
   console.log(transactions)
   console.log("defaultCurrency: ", defaultCurrency)
   console.log("baseCurrency: " , baseCurrency)
@@ -70,9 +133,282 @@ const balance = document.getElementById(
 
 
 
+  let currentDate = new Date();
+
+  function updateMonthDisplay() {
+    const options = { month: 'long', year: 'numeric' };
+    document.getElementById('currentMonth').textContent = currentDate.toLocaleDateString('en-US', options);
+    loadTransactionsForCurrentMonth();
+  }
+  
+  document.getElementById('prevMonth').onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    updateMonthDisplay();
+  };
+  
+  document.getElementById('nextMonth').onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    updateMonthDisplay();
+  };
+  
+  // function loadTransactionsForCurrentMonth() {
+  //   const month = currentDate.getMonth() + 1; // 0-indexed
+  //   const year = currentDate.getFullYear();
+  
+  //   fetch(`http://localhost:3000/api/transaction?month=${month}&year=${year}`)
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       const container = document.getElementById('transactionsContainer');
+  //       container.innerHTML = ''; // Clear old data
+  //       data.forEach(tx => {
+  //         const div = document.createElement('div');
+  //         div.textContent = `${tx.date}: ${tx.description} - ₹${tx.amount}`;
+  //         container.appendChild(div);
+  //       });
+  //     });
+  // }
+
+
+  function loadTransactionsForCurrentMonth() {
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+    // let userid = JSON.stringify(localStorage.getItem('userId'))
+  console.log(userId)
+    // fetch(`http://localhost:3000/api/transaction?month=${month}&year=${year}`)
+    fetch(`http://localhost:3000/api/transaction?month=${String(month).padStart(2, '0')}&year=${year}&user_id=${userId}`)
+
+      .then(res => res.json())
+      .then(transactions => {
+        const container = document.getElementById('transactionsContainer');
+        container.innerHTML = '';
+        // const list2 = document.createElement('list2')
+  
+        const grouped = {};
+  
+        transactions.forEach(tx => {
+          const date = new Date(tx.date);
+          const options = { month: 'long', day: '2-digit', weekday: 'long' };
+          const key = date.toLocaleDateString('en-US', options);
+          if (!grouped[key]) grouped[key] = [];
+          grouped[key].push(tx);
+        });
+  
+        for (const date in grouped) {
+          const section = document.createElement('div');
+          section.className = 'date-group';
+  
+          const heading = document.createElement('h3');
+          heading.className = 'date-heading';
+          heading.textContent = date;
+          section.appendChild(heading);
+
+          const list2 = document.createElement("ul");
+          list2.className = "list";
+  
+          grouped[date].forEach(tx => {
+            const row = document.createElement('div');
+            row.className = 'tx-row';
+  
+            const isIncome = tx.amount > 0;
+            const formattedAmt = `${isIncome ? '+' : '-'}₹${Math.abs(tx.amount).toFixed(2)}`;
+
+            // let togg = document.getElementById('expen');
+            // let tru = togg.checked;
+            // let sig = tru? "-" : "+";
+            console.log("addTransactionDOM() called ")
+            //GET sign
+            // const sign = sig;
+            const item = document.createElement("li");
+            
+          
+            //Add Class Based on Value
+            item.classList.add(
+              tx.sig == "-"? "minus" : "plus"
+            );
+  
+            item.innerHTML = `
+            ${getIcon(tx.text)}${tx.text} <!--<span id="spandate">${getFormattedDate2(tx.date)}</span>--> <span>${tx.amount < 0 ? '' : '+'}${convertCurrency(tx.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions) % 1 === 0? convertCurrency(tx.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(0) : convertCurrency(tx.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(2)}
+    
+            </span>
+            <button class="delete-btn" onclick="removeTransaction(${tx.id})">x</button>
+
+              <!--<div class="tx-left">
+                <div class="tx-icon">${getIcon(tx.text)}</div>
+                <div class="tx-info">
+                  <div class="tx-title">${tx.text}</div>
+                  <div class="tx-account">${tx.currency || 'Cash'}</div>
+                </div>
+              </div>
+              <div class="tx-amount ${isIncome ? 'income' : 'expense'}">
+                ${formattedAmt}
+              </div> -->
+            `;
+            
+            list2.appendChild(item);
+            section.appendChild(list2);
+          });
+  
+          container.appendChild(section);
+        }
+      });
+  }
+  
+  
+  updateMonthDisplay()// Initial load
+  
+
+
+
+
+
+
+
+
+
+
+  function getIcon(category) {
+    const icons = {
+      Petrol: '🚗', Bills: '🧾', Social: '👥', Telephone: '📞',
+      Food: '🍴', Transfer: '🔄', Gift: '🎁', Salary: '💼',
+      Rent: '🏠', Shopping: '🛍️', 'Dining out': '🍽️'
+    };
+    return icons[category] || '💸';
+  }
+  
+
+
+
+
+
+
+
+
+
+  // if (userId == null){
+  //   localStorage.setItem('transactions', '')
+  //   // localStorage.setItem('', '')
+
+
+
+  // }
+
+
+
+
+
+  flatpickr("#calendar", {
+    // enableTime:true,
+    altInput: true,
+    altFormat:" F d, Y",
+    dateFormat: "Y-m-d",
+    defaultDate: "today",
+    onChange: function(selectedDates, dateStr, event) {
+        console.log("change detected");
+        if(!dateStr){
+            console.log("empty value detected! loading current date.");
+            const today = new Date();
+            event.setDate(today, true);
+        }else{
+        
+        console.log("what machine sees:", dateStr);
+        console.log("what you see:", event.altInput.value);
+        console.log("raw date string: ",selectedDates)
+        console.log(event)
+        console.log(`input formatted date(${dateStr}): `,getFormattedDate(dateStr)); 
+        }
+    }
+});
+
+
+flatpickr("#timepicker", {
+  enableTime: true,
+  noCalendar: true,
+  dateFormat: "H:i",
+  time_24hr: false, // set to true for 24-hour format
+  defaultDate: new Date(),
+  onChange: function(selectedDates, timeStr, instance) {
+    if (!timeStr) {
+      const now = new Date();
+      instance.setDate(now, true);
+      console.log("Time reset to now:", instance.input.value);
+    } else {
+      console.log("Selected time:", instance.input.value);
+    }
+  }
+});
+
+
+
+function getFormattedDate(inputDate = new Date()) {
+  console.log("> getFormattedDate() called")
+  let date = new Date(inputDate); // ensures it's a Date object
+  console.log('date: ' ,date)
+  let month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
+  let day = String(date.getDate()).padStart(2, '0');
+  let year = date.getFullYear();
+  let weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date);
+
+  return ` ${weekday} ${month} ${day}, ${year}`;
+}
+
+function getFormattedDate2(inputDate = new Date()) {
+  console.log("> getFormattedDate() called")
+  let date = new Date(inputDate); // ensures it's a Date object
+  console.log('date: ' ,date)
+  let month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
+  let day = String(date.getDate()).padStart(2, '0');
+  let year = date.getFullYear();
+  let weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date);
+
+  return `  ${month} ${day},${weekday}`;
+}
+
+
+
+
+function Logout(){
+  console.log("logging out")
+  localStorage.removeItem('userId');
+  localStorage.removeItem('transactions');
+  localStorage.removeItem('aname');
+  localStorage.removeItem('ratesLastUpdated');
+  localStorage.removeItem('token');
+  localStorage.removeItem('defaultCurrency');
+  
+
+  location.reload()
+}
+
+loginbtn.addEventListener('click', () => {
+  window.location.href = '/login.html';
+  // Login()
+  // e.stopPropagation();
+  // menu.style.display = menu.style.display === "block"? "none":"block";
+});
+
+
+logoutbtn.addEventListener('click', () => {
+  Logout()
+  // e.stopPropagation();
+  // menu.style.display = menu.style.display === "block"? "none":"block";
+});
+
+bttn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  menu.style.display = menu.style.display === "block"? "none":"block";
+});
+
+document.addEventListener('click', () => {
+  menu.style.display="none";
+});
+
+
+
+
+
 
   //Add Transaction
-  function addTransaction(e){
+  async function addTransaction(e){
     e.preventDefault();
 
     console.log("--------------------------------------------------");
@@ -91,6 +427,18 @@ const balance = document.getElementById(
       console.log("   Validation failed: negative amount");
       alert('please enter a valid amount') 
     }else{
+
+
+
+      // ---------------------ADD THESE VARIABLES AND PASS THEM TO TRANSACTION
+      //transactionNote = document.getElementById('note').value;
+      //transactionDate = document.getElementById('date').value; || datestr;
+      //transactionTime = document.getElementById('time').value; || timestr;
+      // userId = localStorage.getItem("user_id")
+      
+
+
+
       let togg = document.getElementById('expen');
       let sig = togg.checked? "-" : "+";
       
@@ -108,31 +456,69 @@ const balance = document.getElementById(
       const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, defaultCurrency,transactions.transaction,transactions,sig).toFixed(2);
       console.log("   Converted amount:", amountInBaseCurrency);
       }else{
+
+
         const inputAmount = parseFloat(amount.value);
         const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(2);
         console.log(" nothing converted. amount:", amountInBaseCurrency);
       }
-      
+
       if(sig == "-"){
         const transaction = {
           id:generateID(),
-          text:text.value,
+          user_id: userId ,
           amount: -amountInBaseCurrency,
           sig:"-",
-          currency: transactionCurrency
+          currency: transactionCurrency,
+          text:text.value,
+          note: "",
+          date: tdate.value,
+           time: ttime.value
         }
         console.log("   Adding expense transaction:", transaction);
+        try{
+          const response = await fetch('http://localhost:3000/api/transaction', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(transaction)
+          });
+        const data = await response.json();
+        console.log('data: ',data)
+
+        }catch (error) {
+          console.log("error sending data to backend")
+        }
         transactions.push(transaction);
         addTransactionDOM(transaction);
       } else {
         const transaction = {
           id:generateID(),
-          text:text.value,
+          user_id: userId ,
           amount: +amountInBaseCurrency,
           sig:"+",
-          currency: transactionCurrency
+          currency: transactionCurrency,
+          text:text.value,
+          note: "",
+          date: tdate.value,
+          time: ttime.value
         }
         console.log("   Adding income transaction:", transaction);
+        try{
+          const response = await fetch('http://localhost:3000/api/transaction', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(transaction)
+          });
+        const data = await response.json();
+        console.log('data: ',data)
+
+        }catch (error) {
+          console.log("error sending data to backend")
+        }
         transactions.push(transaction);
         addTransactionDOM(transaction);
       }
@@ -145,8 +531,12 @@ const balance = document.getElementById(
       
       text.value='';
       amount.value='';
+      // transactionNote.value = '';
+      // transactionDate.value = '';
+      // transactionTime.value = '';
       toggl()
       console.log("   addTransaction completed");
+      location.reload()
     }
   }
 
@@ -404,6 +794,7 @@ function updTransactionDOM(transaction) {
   //GET sign
   let sign2 = sig2[0];
   const item = document.createElement("li");
+  const list = document.getElementById('list')
 
   //Add Class Based on Value
   item.classList.add(
@@ -411,7 +802,7 @@ function updTransactionDOM(transaction) {
   console.log("classlist", item.classList)
   console.log("Before shifting", sig2[0]);
   item.innerHTML = `
-    ${transaction.text} <span>${transaction.amount < 0 ? '' : '+'}${convertCurrency(transaction.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions) % 1 === 0? convertCurrency(transaction.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(0) : convertCurrency(transaction.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(2)}
+    ${transaction.text} <span id="spandate">${getFormattedDate(transaction.date)}</span> <span>${transaction.amount < 0 ? '' : '+'}${convertCurrency(transaction.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions) % 1 === 0? convertCurrency(transaction.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(0) : convertCurrency(transaction.amount, baseCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(2)}
     
     </span>
     <button class="delete-btn" onclick="removeTransaction(${transaction.id})">x</button>
@@ -513,7 +904,7 @@ function updTransactionDOM(transaction) {
         const item = document.createElement('li');
         item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
         item.innerHTML = `
-            ${transaction.text} <span>${transaction.amount < 0 ? '-' : '+'}${convertedAmount % 1 === 0? convertedAmount.toFixed(0):convertedAmount.toFixed(2)}</span>
+            ${transaction.text} <span id="spandate">${getFormattedDate(transaction.date)} </span><span>${transaction.amount < 0 ? '-' : '+'}${convertedAmount % 1 === 0? convertedAmount.toFixed(0):convertedAmount.toFixed(2)}</span>
             <button class="delete-btn" onclick="removeTransaction(${transaction.id})">x</button>
         `;
         list.appendChild(item);
@@ -584,6 +975,7 @@ function updTransactionDOM(transaction) {
     //GET sign
     const sign = sig;
     const item = document.createElement("li");
+    const list = document.getElementById('list')
   
     //Add Class Based on Value
     item.classList.add(
@@ -594,7 +986,7 @@ function updTransactionDOM(transaction) {
     const displayAmount = window.convertCurrency(Math.abs(transaction.amount), baseCurrency, defaultCurrency,transactions.transaction,transactions,sig);
   console.log("adding amount to history ", getCurrencySymbol(defaultCurrency))
     item.innerHTML = `
-      ${transaction.text} <span>${transaction.sig}${displayAmount % 1 === 0? displayAmount.toFixed(0):displayAmount.toFixed(2)}</span>
+      ${transaction.text} <span id="spandate">${ getFormattedDate(transaction.date)}</span> <span>${transaction.sig}${displayAmount % 1 === 0? displayAmount.toFixed(0):displayAmount.toFixed(2)}</span>
       <button class="delete-btn" onclick="removeTransaction(${transaction.id})">x</button>
       `;
     list.appendChild(item);
@@ -607,14 +999,42 @@ function updTransactionDOM(transaction) {
   //6 
   
   //Remove Transaction by ID
-  function removeTransaction(id){
+  // function removeTransaction(id){
+  //   console.log("removeTransaction() called with ID:", id);
+  //   transactions = transactions.filter(transaction => transaction.id !== id);
+  //   console.log("Remaining transactions:", transactions);
+  //   updateLocalStorage();
+  //   Init();
+  //   console.log("removeTransaction completed");
+  // }
+  async function removeTransaction(id) {
     console.log("removeTransaction() called with ID:", id);
-    transactions = transactions.filter(transaction => transaction.id !== id);
-    console.log("Remaining transactions:", transactions);
-    updateLocalStorage();
-    Init();
-    console.log("removeTransaction completed");
+  
+    try {
+      const response = await fetch(`http://localhost:3000/api/transaction/${id}`, {
+        method: 'DELETE'
+      });
+  
+      if (response.ok) {
+        transactions = transactions.filter(transaction => transaction.id !== id);
+        updateLocalStorage();
+        Init();
+        console.log("Transaction deleted from backend and frontend.");
+        location.reload()
+      } else {
+        console.error("Failed to delete from backend");
+        alert("Error deleting transaction from server.");
+      }
+    } catch (err) {
+      console.error("Network error during deletion:", err);
+      alert("Could not connect to backend.");
+    }
   }
+  
+
+
+
+
   //last
   //update Local Storage Transaction
   function updateLocalStorage(){
@@ -694,6 +1114,7 @@ function CategoryText(ncat,option,tcat,event){
     console.log(">Init() called");
     list.innerHTML = "";
     // transactions.forEach(updTransactionDOM);
+    // userdata(userId)
     updateValues();
     transactions.forEach(updTransactionDOM);
     

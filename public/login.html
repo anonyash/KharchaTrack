@@ -17,7 +17,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #316064 0%, #132222 100%);
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
         }
 
         .login-container {
@@ -75,7 +76,7 @@
         .login-btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(to right, #667eea, #764ba2);
+            background: linear-gradient(to right, #132222, #1f3a3a);
             color: white;
             border: none;
             border-radius: 10px;
@@ -131,7 +132,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>Welcome Back</h1>
+        <h1>Login</h1>
         <form id="loginForm">
             <div class="input-group">
                 <input type="email" id="email" placeholder="Email" required>
@@ -196,10 +197,47 @@
                 });
 
                 const data = await response.json();
+                console.log(data)
+                                
+                async function userdata(userid){
+                console.log(userid)
+                let id = userid
+                const res = await fetch('http://localhost:3000/api/user-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                    // body: JSON.stringify({ fullName, email, password })
+                });
+
+                console.log('res: ',res)
+                let transactions = await res.json();
+                console.log('data: ',transactions)
+
+                if (res.ok) {
+                console.log("response OK")
+                console.log(res)
+                // Store the token
+                let trxns = JSON.stringify(transactions)
+                localStorage.setItem('transactions', trxns)
+                // localStorage.setItem('token', data.token);
+                // localStorage.setItem('userId', data.userId);
+                // Redirect to dashboard or home page
+                // window.location.href = 'index.html';
+                } else {
+                alert(data.message || 'failed to load transactions');
+                }
+
+                }
 
                 if (response.ok) {
                     // Store the token
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.userId);
+                    localStorage.setItem('aname', data.username);
+                    await userdata(data.userId)
+                    // localStorage.setItem('transactions', data.userId);
                     // Redirect to dashboard or home page
                     window.location.href = 'index.html';
                 } else {

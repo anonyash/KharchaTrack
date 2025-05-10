@@ -1,11 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const authenticateToken = require('../middleware/auth');
+const db = require('../database');
 
-router.get('/user-data', authenticateToken, (req, res) => {
-  const userId = req.user.id;
+console.log('user.js')
+router.post('/user-data', async  (req, res) => {
+  console.log('user-data hit: ', req.body.id )
+  const userId = req.body.id;
   // Fetch user-specific data from DB...
-  res.json({ message: `Hello User #${userId}` });
+  // console.log('message:'`Hello User #${userId}`)
+
+  db.all(`SELECT * FROM transactions WHERE user_id = ${userId}`, [], (err, rows) => {
+    if (err) {
+      return res.status(500).send('Database error');
+    }
+    res.json(rows);
+    console.log(rows)
+  });
+
+
+
 });
 
 module.exports = router;

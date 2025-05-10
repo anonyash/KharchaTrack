@@ -17,7 +17,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #316064 0%, #132222 100%);
         }
 
         .signup-container {
@@ -75,7 +75,7 @@
         .signup-btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(to right, #667eea, #764ba2);
+            background: linear-gradient(to right, #132222, #1f3a3a);
             color: white;
             border: none;
             border-radius: 10px;
@@ -214,12 +214,13 @@
                 });
 
                 const data = await response.json();
-                console.log(data)
+                console.log('data: ',data)
 
                 if (response.ok) {
                     console.log("response OK")
                     // Store the token
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.userId);
                     // Redirect to dashboard or home page
                     window.location.href = 'index.html';
                 } else {

@@ -21,6 +21,72 @@
       "Open Sans", "Helvetica Neue", sans-serif;
   }
 
+  .acunt{
+    /* background-color: #191919; */
+    /* width: 125px; */
+    text-align: center;
+    align-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    place-content: center;
+
+  }
+  #accntbtn{
+    background-color: #132222;
+    color: white;
+    border: #1d3739 solid 3px;
+    width: 100px;
+    height: 25px;
+    /* background-color: #1c3638; */
+    margin: 0px;
+    padding: 0px;
+    /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
+  }
+  #accntbtn:hover {
+    background-color: #1c3638;
+    cursor: pointer;
+
+  }
+  
+
+  #abtn{
+    display: none;
+  }
+
+
+  .dropdown{
+    position: relative;
+    display: inline-block;
+
+  }
+  .dropdowncont{
+    position: absolute;
+    display: none;
+    background-color: #132222;
+    min-width: 100px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    right: 0px;
+    margin-top: 2px;
+    
+  }
+
+.dropdownitem{
+  padding: 10px;
+  cursor: pointer;
+}
+.dropdownitem{
+  background-color: #191919;
+}
+
+.dropdownitem:hover{
+  background-color: #1c3638;
+}
+
+
+
   .main_container{
     height: 100vh;
      width: 100vw; 
@@ -158,6 +224,7 @@
     justify-content: center;
     /* align-items: center; */
     gap: 20px;
+    justify-content: space-evenly;
   }
   
 
@@ -579,3 +646,99 @@ input:disabled {
 }
 
 
+/* Highlight selected date */
+.flatpickr-day.selected {
+  background-color: #316064;
+  color: white;
+  border-radius: 50%;
+  border-color:#316064 ;
+}
+.flatpickr-day.selected:hover {
+  background-color: #9ee1c6;
+  color: black;
+  border-radius: 50%;
+  border-color:#316064 ;
+}
+
+.calendar.form-control.input.active:focus-visible {
+  outline: #316064 auto 1px;
+}
+.calendar.form-control.input:focus-visible{
+  outline: #316064 auto 1px;
+
+}
+/* Change hover effect */
+.flatpickr-day:hover {
+  background-color: #9ee1c6;
+  color: #316064;
+}
+/* Change calendar background */
+.flatpickr-calendar {
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(34, 255, 0, 0.15);
+  
+}
+
+.flatpickr-calendar.animate.arrowBottom.arrowLeft.open{
+  border-color:#316064 ;
+
+}
+
+.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay {
+  background: #316064;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #fff;
+  border-color: #316064;
+}
+
+button:hover{
+  cursor: pointer;
+
+}
+
+#logout2{
+  display: none;
+}
+
+#login2{
+  display: none;
+}
+
+#spandate{
+  font-family: system-ui;
+    font-style: italic;
+    font-size: small;
+    font-weight: 600;
+    align-content: flex-end;
+}
+
+#nextMonth:hover{
+  background-color: #316064;
+
+}
+#prevMonth:hover{
+  background-color: #316064;
+  /* border: none; */
+
+}
+#filterButton:hover{
+  background-color: #316064;
+  
+
+}
+
+#nextMonth{
+  color: inherit;background-color:#1c3638; border: 0px; font-size: x-large;        padding: 5px 15px;
+
+}
+#prevMonth{
+  color: inherit;background-color:#1c3638; border: 0px; font-size: x-large;        padding: 5px 15px;
+
+}
+#filterButton{
+  color: inherit;background-color:#1c3638; border: 0px; font-size: x-large;        padding: 5px 15px;
+  
+
+}
