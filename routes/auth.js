@@ -63,17 +63,19 @@ router.post('/signup', async (req, res) => {
 
 // Login
 router.post('/login', (req, res) => {
+  console.log("login route hit")
     const { email, password } = req.body;
   
     db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+      console.log(user)
       if (err || !user) return res.status(401).json({ message: 'Invalid credentials' });
   
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-      const token = jwt.sign({ id: user.id, email: user.email }, jwtSecret, { expiresIn: '1h' });
+      const token = jwt.sign({ id: user.user_id, email: user.email }, jwtSecret, { expiresIn: '1h' });
   
-      res.json({ success: true, token, userId: user.id , username: user.fullName });
+      res.json({ success: true, token, userId: user.user_id , username: user.fullName });
     });
   });
 

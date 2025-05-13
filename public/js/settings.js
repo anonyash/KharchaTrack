@@ -129,7 +129,7 @@ function saveRates(rates) {
     console.log("> saveRates() called")
     console.log(rates)
     localStorage.setItem('exchangeRates', JSON.stringify(rates));
-    localStorage.setItem('ratesLastUpdated', Date.now());
+    localStorage.setItem('ratesLastUpdated', new Date().toLocaleString());
 }
 
 // Function to load rates from localStorage

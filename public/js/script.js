@@ -351,6 +351,7 @@ function getFormattedDate(inputDate = new Date()) {
   return ` ${weekday} ${month} ${day}, ${year}`;
 }
 
+
 function getFormattedDate2(inputDate = new Date()) {
   console.log("> getFormattedDate() called")
   let date = new Date(inputDate); // ensures it's a Date object
@@ -371,7 +372,7 @@ function Logout(){
   localStorage.removeItem('userId');
   localStorage.removeItem('transactions');
   localStorage.removeItem('aname');
-  localStorage.removeItem('ratesLastUpdated');
+  // localStorage.removeItem('ratesLastUpdated');
   localStorage.removeItem('token');
   localStorage.removeItem('defaultCurrency');
   
@@ -420,161 +421,188 @@ document.addEventListener('click', () => {
     console.log(e.target[1].value)
     console.log(amount.value)
     document.getElementById('expen').checked? text.value = e.target[3].value:text.value = e.target[1].value ;
+    
+    // Add account validation
+    const selectedAccountId = accountSelect.value;
+    if (!selectedAccountId) {
+        alert('Please select an account');
+        return;
+    }
+
     if(text.value.trim() === '' || amount.value.trim() === ''){
-      console.log("   Validation failed: empty fields");
-      alert('please add category and amount')
+        console.log("   Validation failed: empty fields");
+        alert('please add category and amount')
     }else if(amount.value < 0){ 
-      console.log("   Validation failed: negative amount");
-      alert('please enter a valid amount') 
+        console.log("   Validation failed: negative amount");
+        alert('please enter a valid amount') 
     }else{
-
-
-
-      // ---------------------ADD THESE VARIABLES AND PASS THEM TO TRANSACTION
-      //transactionNote = document.getElementById('note').value;
-      //transactionDate = document.getElementById('date').value; || datestr;
-      //transactionTime = document.getElementById('time').value; || timestr;
-      // userId = localStorage.getItem("user_id")
-      
-
-
-
-      let togg = document.getElementById('expen');
-      let sig = togg.checked? "-" : "+";
-      
-      // Get the selected transaction currency
-      let transactionCurrency = document.getElementById('transaction-currency').value;
-      console.log("   Transaction currency:", transactionCurrency, "currentCurrency: ",defaultCurrency );
-
-      // Convert the input amount from transaction currency to base currency (INR)
-      const inputAmount = parseFloat(amount.value);
-      const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, baseCurrency,transactions.transaction,transactions,sig);
-      console.log("amountInBaseCurrency: " ,amountInBaseCurrency)
-
-      if(transactionCurrency != defaultCurrency){
-      const inputAmount = parseFloat(amount.value);
-      const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, defaultCurrency,transactions.transaction,transactions,sig).toFixed(2);
-      console.log("   Converted amount:", amountInBaseCurrency);
-      }else{
-
+        let togg = document.getElementById('expen');
+        let sig = togg.checked? "-" : "+";
+        
+        let transactionCurrency = document.getElementById('transaction-currency').value;
+        console.log("   Transaction currency:", transactionCurrency, "currentCurrency: ",defaultCurrency );
 
         const inputAmount = parseFloat(amount.value);
-        const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(2);
-        console.log(" nothing converted. amount:", amountInBaseCurrency);
-      }
+        const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, baseCurrency,transactions.transaction,transactions,sig);
+        console.log("amountInBaseCurrency: " ,amountInBaseCurrency)
 
-      if(sig == "-"){
-        const transaction = {
-          id:generateID(),
-          user_id: userId ,
-          amount: -amountInBaseCurrency,
-          sig:"-",
-          currency: transactionCurrency,
-          text:text.value,
-          note: "",
-          date: tdate.value,
-           time: ttime.value
+        if(transactionCurrency != defaultCurrency){
+            const inputAmount = parseFloat(amount.value);
+            const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, defaultCurrency,transactions.transaction,transactions,sig).toFixed(2);
+            console.log("   Converted amount:", amountInBaseCurrency);
+        }else{
+            const inputAmount = parseFloat(amount.value);
+            const amountInBaseCurrency = window.convertCurrency(inputAmount, transactionCurrency, defaultCurrency,transactions.transaction,transactions).toFixed(2);
+            console.log(" nothing converted. amount:", amountInBaseCurrency);
         }
-        console.log("   Adding expense transaction:", transaction);
-        try{
-          const response = await fetch('http://localhost:3000/api/transaction', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(transaction)
-          });
-        const data = await response.json();
-        console.log('data: ',data)
 
-        }catch (error) {
-          console.log("error sending data to backend")
-        }
-        transactions.push(transaction);
-        addTransactionDOM(transaction);
-      } else {
-        const transaction = {
-          id:generateID(),
-          user_id: userId ,
-          amount: +amountInBaseCurrency,
-          sig:"+",
-          currency: transactionCurrency,
-          text:text.value,
-          note: "",
-          date: tdate.value,
-          time: ttime.value
-        }
-        console.log("   Adding income transaction:", transaction);
-        try{
-          const response = await fetch('http://localhost:3000/api/transaction', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(transaction)
-          });
-        const data = await response.json();
-        console.log('data: ',data)
+        if(sig == "-"){
+            const transaction = {
+                id: generateID(),
+                user_id: userId,
+                account_id: selectedAccountId,
+                amount: -amountInBaseCurrency,
+                sig: "-",
+                currency: transactionCurrency,
+                text: text.value,
+                note: "",
+                date: tdate.value,
+                time: ttime.value
+            }
+            console.log("   Adding expense transaction:", transaction);
+            try{
+                const response = await fetch('http://localhost:3000/api/transaction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(transaction)
+                });
+                if (!response.ok) throw new Error('Failed to add transaction');
+                const data = await response.json();
+                console.log('data: ',data);
+                
+                // Update account balance
+                const accountResponse = await fetch(`http://localhost:3000/api/accounts/${selectedAccountId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        balance: -amountInBaseCurrency,
+                        updateType: 'add'
+                    })
+                });
+                if (!accountResponse.ok) throw new Error('Failed to update account balance');
 
-        }catch (error) {
-          console.log("error sending data to backend")
+            }catch (error) {
+                console.error("Error in transaction:", error);
+            }
+            transactions.push(transaction);
+            addTransactionDOM(transaction);
+        } else {
+            const transaction = {
+                id: generateID(),
+                user_id: userId,
+                account_id: selectedAccountId,
+                amount: +amountInBaseCurrency,
+                sig: "+",
+                currency: transactionCurrency,
+                text: text.value,
+                note: "",
+                date: tdate.value,
+                time: ttime.value
+            }
+            console.log("   Adding income transaction:", transaction);
+            try{
+                const response = await fetch('http://localhost:3000/api/transaction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(transaction)
+                });
+                if (!response.ok) throw new Error('Failed to add transaction');
+                const data = await response.json();
+                console.log('data: ',data);
+                
+                // Update account balance
+                const accountResponse = await fetch(`http://localhost:3000/api/accounts/${selectedAccountId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        balance: amountInBaseCurrency,
+                        updateType: 'add'
+                    })
+                });
+                if (!accountResponse.ok) throw new Error('Failed to update account balance');
+
+            }catch (error) {
+                console.error("Error in transaction:", error);
+            }
+            transactions.push(transaction);
+            addTransactionDOM(transaction);
         }
-        transactions.push(transaction);
-        addTransactionDOM(transaction);
-      }
         
-      updateValues();
-      updateLocalStorage();
-      
-      // Update chart data
-      updateChartData();
-      
-      text.value='';
-      amount.value='';
-      // transactionNote.value = '';
-      // transactionDate.value = '';
-      // transactionTime.value = '';
-      toggl()
-      console.log("   addTransaction completed");
-      location.reload()
+        await updateBalanceDisplay();
+        updateValues();
+        updateLocalStorage();
+        
+        // Update chart data
+        updateChartData();
+        
+        text.value='';
+        amount.value='';
+        toggl()
+        console.log("   addTransaction completed");
+        location.reload()
     }
-  }
+}
 
 
 
 
   //Update the balance income and expence
-  function updateValues() {
+  async function updateValues() {
     console.log(">updateValues() called");
-    const amounts = transactions.map(
-      (transaction) => transaction.amount
-    );
-    const total = amounts
-      .reduce((acc, item) => (acc += item), 0)
-      ;
-    const income = amounts
-      .filter((item) => item > 0)
-      .reduce((acc, item) => (acc += item), 0)
-      ;
-    const expense =
-      (amounts
-        .filter((item) => item < 0)
-        .reduce((acc, item) => (acc += item), 0) *
-      -1);
-    sig2 = transactions.map(
-        (transaction) => transaction.sig
-    );
-      // transactions.forEach(updTransactionDOM);
-      chartinit()
-      updateChartData()
-      console.log("sig2: ",sig2)
-      console.log(expense)
-      console.log(defaultCurrency)
-      balance.innerText=`${getCurrencySymbol(defaultCurrency)}${convertCurrency(total, baseCurrency, defaultCurrency,transactions.transaction,transactions,sig2) % 1 === 0? convertCurrency(total, baseCurrency, defaultCurrency).toFixed(0) : convertCurrency(total, baseCurrency, defaultCurrency).toFixed(2)}`;
-      money_plus.innerText = `${getCurrencySymbol(defaultCurrency)}${ convertCurrency( income, baseCurrency, defaultCurrency,transactions.transaction,transactions,sig2 ) %1===0?  convertCurrency( income, baseCurrency, defaultCurrency).toFixed(0) :  convertCurrency( income, baseCurrency, defaultCurrency ).toFixed(2)}`; //, baseCurrency, currentCurrency, transactions
-      money_minus.innerText = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(expense, baseCurrency, defaultCurrency,transactions.transaction,transactions,sig2)%1===0?  convertCurrency( expense, baseCurrency, defaultCurrency).toFixed(0) :  convertCurrency( expense, baseCurrency, defaultCurrency).toFixed(2)}`;
-      console.log("       updateValues() done")
+    try {
+        const response = await fetch(`http://localhost:3000/api/account-summary?user_id=${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch account summary');
+        
+        const summary = await response.json();
+        
+        // Update balance display
+        const balanceElement = document.getElementById('balance');
+        const incomeElement = document.getElementById('money-plus');
+        const expenseElement = document.getElementById('money-minus');
+        
+        if (balanceElement) {
+            balanceElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(summary.totalBalance, baseCurrency, defaultCurrency, transactions.transaction, transactions) % 1 === 0 ? 
+                convertCurrency(summary.totalBalance, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(0) : 
+                convertCurrency(summary.totalBalance, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(2)}`;
+        }
+        
+        if (incomeElement) {
+            incomeElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(summary.totalIncome, baseCurrency, defaultCurrency, transactions.transaction, transactions) % 1 === 0 ? 
+                convertCurrency(summary.totalIncome, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(0) : 
+                convertCurrency(summary.totalIncome, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(2)}`;
+        }
+        
+        if (expenseElement) {
+            expenseElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(summary.totalExpenses, baseCurrency, defaultCurrency, transactions.transaction, transactions) % 1 === 0 ? 
+                convertCurrency(summary.totalExpenses, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(0) : 
+                convertCurrency(summary.totalExpenses, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(2)}`;
+        }
+
+        chartinit();
+        updateChartData();
+        console.log("       updateValues() done");
+    } catch (error) {
+        console.error('Error updating values:', error);
     }
+}
 
 
 
@@ -1018,6 +1046,7 @@ function updTransactionDOM(transaction) {
       if (response.ok) {
         transactions = transactions.filter(transaction => transaction.id !== id);
         updateLocalStorage();
+        await updateBalanceDisplay();
         Init();
         console.log("Transaction deleted from backend and frontend.");
         location.reload()
@@ -1113,13 +1142,87 @@ function CategoryText(ncat,option,tcat,event){
   function Init() {
     console.log(">Init() called");
     list.innerHTML = "";
-    // transactions.forEach(updTransactionDOM);
-    // userdata(userId)
-    updateValues();
-    transactions.forEach(updTransactionDOM);
-    
+    fetchAccounts().then(() => {
+        updateLocalStorage(); // Update localStorage after fetching accounts
+        updateBalanceDisplay();
+        updateValues();
+        transactions.forEach(updTransactionDOM);
+    });
   }
 
-  Init();
+ 
+
+// Add account selection variables
+let accountSelect = document.getElementById('account-select');
+let accounts = [];
+
+// Function to fetch and populate accounts
+async function fetchAccounts() {
+    try {
+        const response = await fetch(`http://localhost:3000/api/accounts?user_id=${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch accounts');
+        
+        accounts = await response.json();
+        populateAccountSelect();
+    } catch (error) {
+        console.error('Error fetching accounts:', error);
+    }
+}
+
+// Function to format currency
+function formatCurrency(amount) {
+    const symbol = getCurrencySymbol(defaultCurrency);
+    const formattedAmount = Math.abs(amount).toFixed(2);
+    return `${symbol}${formattedAmount}`;
+}
+
+// Function to populate account select dropdown
+function populateAccountSelect() {
+    accountSelect.innerHTML = '<option value="">Select an account</option>';
+    accounts.forEach(account => {
+        const option = document.createElement('option');
+        option.value = account.id;
+        option.textContent = `${account.name} (${formatCurrency(account.balance)})`;
+        accountSelect.appendChild(option);
+    });
+}
+
+
+Init();
   
-  form.addEventListener('submit',addTransaction);
+form.addEventListener('submit',addTransaction);
+
+// Function to update balance display
+async function updateBalanceDisplay() {
+    try {
+        const response = await fetch(`http://localhost:3000/api/account-summary?user_id=${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch account summary');
+        
+        const summary = await response.json();
+        
+        // Update balance display
+        const balanceElement = document.getElementById('balance');
+        const incomeElement = document.getElementById('money-plus');
+        const expenseElement = document.getElementById('money-minus');
+        
+        if (balanceElement) {
+            balanceElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(summary.totalBalance, baseCurrency, defaultCurrency, transactions.transaction, transactions) % 1 === 0 ? 
+                convertCurrency(summary.totalBalance, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(0) : 
+                convertCurrency(summary.totalBalance, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(2)}`;
+        }
+        
+        if (incomeElement) {
+            incomeElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(summary.totalIncome, baseCurrency, defaultCurrency, transactions.transaction, transactions) % 1 === 0 ? 
+                convertCurrency(summary.totalIncome, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(0) : 
+                convertCurrency(summary.totalIncome, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(2)}`;
+        }
+        
+        if (expenseElement) {
+            expenseElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(summary.totalExpenses, baseCurrency, defaultCurrency, transactions.transaction, transactions) % 1 === 0 ? 
+                convertCurrency(summary.totalExpenses, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(0) : 
+                convertCurrency(summary.totalExpenses, baseCurrency, defaultCurrency, transactions.transaction, transactions).toFixed(2)}`;
+        }
+    } catch (error) {
+        console.error('Error updating balance display:', error);
+    }
+}
