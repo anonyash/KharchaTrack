@@ -61,6 +61,7 @@
     display: inline-block;
 
   }
+
   .dropdowncont{
     position: absolute;
     display: none;
@@ -73,6 +74,33 @@
     margin-top: 2px;
     
   }
+  
+  .dropdowncont2{
+    position: absolute;
+    display: none;
+    flex-direction: column  ;
+    background-color: #c94545;
+    /* min-width: 100px; */
+    width: max-content;
+    border: 1px solid #c94545;;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    right: 0px;
+    margin-top: 2px;
+    
+  }
+
+  #dropdownmenu22{
+    display: flex;
+  }
+
+
+
+  .dropdowncont2:hover{
+    background-color: #c94545;
+    cursor:help;
+  }
+
 
 .dropdownitem{
   padding: 10px;
@@ -705,6 +733,10 @@ button:hover{
 }
 
 #login2{
+  display: none;
+}
+
+#accname2{
   display: none;
 }
 

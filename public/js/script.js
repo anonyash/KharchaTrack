@@ -16,6 +16,7 @@ const balance = document.getElementById(
   let tdate = document.getElementById('calendar')
   let ttime = document.getElementById('timepicker')
   const amount = document.getElementById("amount");
+  const warn = document.getElementById('dropdownmenu2') ;
   // const dummyTransactions = [
   //   { id: 1, text: "Flower", amount: -20 },
   //   { id: 2, text: "Salary", amount: 300 },
@@ -24,20 +25,23 @@ const balance = document.getElementById(
   // ];
   
   // let transactions = dummyTransactions;
-
-let userId = localStorage.getItem('userId')
+let username = localStorage.getItem('aname') ;
+let userId = localStorage.getItem('userId');
 console.log('userId: ', userId)
 // userdata(userId)
 if (!userId){
   console.log("user id is ", userId)
   let logout2 = document.getElementById('logout')
   logout2.id = "logout2"
+  document.getElementById('accname').id = 'accname2'
+    warn.id = 'dropdownmenu22'
+// warn.id = 'dropdownmenu22'
 
 }else{
   console.log("user id is ", userId)
   let login2 = document.getElementById('login')
   login2.id = "login2"
-  
+  document.getElementById('accname').textContent = `Logged in as : ${username} `
 }
 
 
@@ -85,7 +89,7 @@ if (!userId){
   let transactions = localStorage.getItem('transactions') !== null ? localStorageTransactions : [];
   console.log(transactions)
   
-  let username = localStorage.getItem('aname') ;
+  
   //5
   let cur = "₹" //   "$"    "₹"
 
@@ -100,7 +104,8 @@ if (!userId){
   let categorytext = document.getElementsByClassName('categorytext')
   let category = document.getElementsByClassName("category")
   const bttn = document.getElementById('accntbtn');
-  const menu = document.getElementById('dropdownmenu');
+  const menu = document.getElementById('dropdownmenu') ;
+  
   const logoutbtn = document.getElementById('logout') || document.getElementById('logout2');
   const loginbtn = document.getElementById('login') || document.getElementById('login2');
 
