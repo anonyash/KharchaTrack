@@ -1,15 +1,43 @@
+// apply convertCurrency
+// 
 // Global variables
 let accounts = [];
 let transactions = [];
 let userId = localStorage.getItem('userId');
+let defcur = localStorage.getItem('defaultCurrency')
+let baseCurrency = 'INR';
 
 // Utility functions
-function formatCurrency(amount) {
+function formatCurrency(amount, cur) {
     return new Intl.NumberFormat('en-IN', {
         style: 'currency',
-        currency: 'INR'
+        currency: `${cur}`
     }).format(amount);
 }
+
+// Function to convert currency
+ function convertCurrency(amount, fromCurrency, toCurrency, transaction, transactions,sig) {
+    console.log(">convertCurrency() called with:", { amount, fromCurrency, toCurrency, transaction,transactions,sig });
+    if (fromCurrency === toCurrency) {
+        console.log("   Same currency, returning original amount");
+        return amount;
+    }
+    
+    // Try to get rates from localStorage first
+    const savedRates = JSON.parse(localStorage.getItem('exchangeRates'));
+    const rates = savedRates || window.exchangeRates || fallbackRates;
+    console.log("   Using rates:", rates);
+    
+    // Convert to INR first (base currency)
+    const inrAmount = fromCurrency == 'INR'? amount : amount / rates[fromCurrency];
+    console.log("   transaction sign:",sig)
+    console.log("converted Amount: ",inrAmount)
+    // Then convert to target currency
+    const result =  inrAmount  * rates[toCurrency];
+    console.log("   Conversion result:", result);
+    return result;
+  }
+
 
 function calculatePercentageChange(current, previous) {
     if (previous === 0) return 0;
@@ -50,10 +78,10 @@ async function fetchData() {
 
 // Update account summary cards
 function updateAccountSummary(summary) {
-    document.getElementById('totalBalance').textContent = formatCurrency(summary.totalBalance);
-    document.getElementById('totalIncome').textContent = formatCurrency(summary.totalIncome);
-    document.getElementById('totalExpenses').textContent = formatCurrency(summary.totalExpenses);
-    document.getElementById('totalSavings').textContent = formatCurrency(summary.savings);
+    document.getElementById('totalBalance').textContent = formatCurrency(convertCurrency(summary.totalBalance,baseCurrency, defcur,summary,transactions,summary.sig ), defcur);
+    document.getElementById('totalIncome').textContent = formatCurrency(convertCurrency(summary.totalIncome,baseCurrency, defcur,summary,transactions,summary.sig ), defcur);
+    document.getElementById('totalExpenses').textContent = formatCurrency( convertCurrency(summary.totalExpenses,baseCurrency, defcur,summary,transactions,summary.sig ), defcur);
+    document.getElementById('totalSavings').textContent = formatCurrency( convertCurrency(summary.savings,baseCurrency, defcur,summary,transactions,summary.sig ), defcur);
 
     // Update change indicators (example with previous month's data)
     const previousMonthData = {
@@ -86,7 +114,7 @@ function renderAccountsList() {
             <div class="account-info">
                 <h4>${account.name}</h4>
                 <p class="account-balance ${account.balance >= 0 ? 'money-plus' : 'money-minus'}">
-                    ${formatCurrency(account.balance)}
+                    ${formatCurrency(convertCurrency(account.balance,baseCurrency, defcur,account,transactions,account.sig ), defcur)}
                 </p>
                 <p class="account-type">${account.type}</p>
             </div>
@@ -123,7 +151,7 @@ async function viewAccountTransactions(accountId) {
                         <p class="transaction-date">${new Date(transaction.date).toLocaleDateString()}</p>
                     </div>
                     <p class="transaction-amount ${transaction.amount >= 0 ? 'money-plus' : 'money-minus'}">
-                        ${formatCurrency(transaction.amount)}
+                        ${formatCurrency(convertCurrency(transaction.amount,baseCurrency, defcur,transaction,transactions,transaction.sig ), defcur)}
                     </p>
                 </div>
             `).join('')}
@@ -176,6 +204,43 @@ async function addTransaction(accountId) {
     }
 }
 
+
+
+//function to update transactions in localstorage
+async function userdata(userid){
+    console.log(userid)
+    let id = userid
+    const res = await fetch('http://localhost:3000/api/user-data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: id })
+        // body: JSON.stringify({ fullName, email, password })
+    });
+
+    console.log('res: ',res)
+    let transactions = await res.json();
+    console.log('data: ',transactions)
+
+    if (res.ok) {
+    console.log("response OK")
+    console.log(res)
+    // Store the token
+    let trxns = JSON.stringify(transactions)
+    localStorage.setItem('transactions', trxns)
+    // localStorage.setItem('token', data.token);
+    // localStorage.setItem('userId', data.userId);
+    // Redirect to dashboard or home page
+    // window.location.href = 'index.html';
+    } else {
+    alert(data.message || 'failed to load transactions');
+    }
+
+    }
+
+
+
 // Update account management functions to handle transactions
 async function deleteAccount(id) {
     if (!confirm('Are you sure you want to delete this account? All associated transactions will be deleted.')) return;
@@ -191,8 +256,10 @@ async function deleteAccount(id) {
         accounts = accounts.filter(acc => acc.id !== id);
         
         // Update localStorage
+        await userdata(userId)
         const localStorageTransactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-        const updatedTransactions = localStorageTransactions.filter(t => t.account_id !== id);
+        const updatedTransactions = localStorageTransactions //.filter(t => t.account_id !== id);
+        
         localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
 
         // Update UI
@@ -204,6 +271,7 @@ async function deleteAccount(id) {
         location.reload();
     } catch (error) {
         console.error('Error deleting account:', error);
+        location.reload();
     }
 }
 
@@ -221,7 +289,7 @@ function renderTransactions() {
                 <p class="transaction-date">${new Date(transaction.date).toLocaleDateString()}</p>
             </div>
             <p class="transaction-amount ${transaction.amount >= 0 ? 'money-plus' : 'money-minus'}">
-                ${formatCurrency(transaction.amount)}
+                ${formatCurrency(convertCurrency(transaction.amount,baseCurrency, defcur,transaction,transactions,transaction.sig ), defcur)}
             </p>
         </div>
     `).join('');
@@ -300,8 +368,9 @@ async function addAccount() {
     const type = prompt('Enter account type (cash/bank/credit):');
     if (!type) return;
 
-    const balance = parseFloat(prompt('Enter initial balance:'));
-    if (isNaN(balance)) return;
+    const bal = parseFloat(prompt(`Enter initial balance in ${defcur} :`));
+    if (isNaN(bal)) return;
+    let balance = defcur == 'INR'? bal : convertCurrency(bal, defcur,baseCurrency,transactions.transaction,transactions,'+' )
 
     try {
         const response = await fetch('http://localhost:3000/api/accounts', {
@@ -343,8 +412,10 @@ async function addAccount() {
         // }
         await fetchData(); // Refresh all data including account summary
         alert('Account created successfully!');
+        location.reload();
     } catch (error) {
         console.error('Error creating account:', error);
+        location.reload();
     }
 }
 

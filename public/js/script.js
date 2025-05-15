@@ -1037,6 +1037,7 @@ function updTransactionDOM(transaction) {
   // }
   async function removeTransaction(id) {
     console.log("removeTransaction() called with ID:", id);
+    await userdata(userId) //not working
   
     try {
       const response = await fetch(`http://localhost:3000/api/transaction/${id}`, {
@@ -1044,22 +1045,61 @@ function updTransactionDOM(transaction) {
       });
   
       if (response.ok) {
+        console.log("response ok")
         transactions = transactions.filter(transaction => transaction.id !== id);
         updateLocalStorage();
         await updateBalanceDisplay();
+        
         Init();
         console.log("Transaction deleted from backend and frontend.");
         location.reload()
       } else {
         console.error("Failed to delete from backend");
         alert("Error deleting transaction from server.");
+        location.reload()
       }
     } catch (err) {
       console.error("Network error during deletion:", err);
       alert("Could not connect to backend.");
+      location.reload()
     }
   }
   
+
+//function to update transactions in localstorage
+  async function userdata(userid){
+    console.log(userid)
+    let id = userid
+    const res = await fetch('http://localhost:3000/api/user-data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: id })
+        // body: JSON.stringify({ fullName, email, password })
+    });
+
+    console.log('res: ',res)
+    let transactions = await res.json();
+    console.log('data: ',transactions)
+
+    if (res.ok) {
+    console.log("response OK")
+    console.log(res)
+    // Store the token
+    let trxns = JSON.stringify(transactions)
+    localStorage.setItem('transactions', trxns)
+    // localStorage.setItem('token', data.token);
+    // localStorage.setItem('userId', data.userId);
+    // Redirect to dashboard or home page
+    // window.location.href = 'index.html';
+    } else {
+    alert(data.message || 'failed to load transactions');
+    }
+
+    }
+
+
 
 
 
@@ -1182,7 +1222,7 @@ function populateAccountSelect() {
     accounts.forEach(account => {
         const option = document.createElement('option');
         option.value = account.id;
-        option.textContent = `${account.name} (${formatCurrency(account.balance)})`;
+        option.textContent = `${account.name} : (${formatCurrency(convertCurrency(account.balance,baseCurrency, defaultCurrency,account,transactions,account.sig ))})`;
         accountSelect.appendChild(option);
     });
 }
