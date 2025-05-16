@@ -1,0 +1,251 @@
+/* Filters Section */
+.filters-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #132222;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.time-period-selector {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.period-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #316064;
+    border-radius: 4px;
+    background-color: #1c3638;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.period-btn:hover {
+    background-color: #316064;
+}
+
+.period-btn.active {
+    background-color: #316064;
+    color: #fff;
+    border-color: #316064;
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-control {
+    padding: 0.5rem;
+    border: 1px solid #316064;
+    border-radius: 4px;
+    min-width: 150px;
+    background-color: #1c3638;
+    color: white;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #2ecc71;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: #132222;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+    margin: 0 0 1rem 0;
+    color: #316064;
+    font-size: 1.1rem;
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 0;
+    color: white;
+}
+
+.stat-change {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.change-icon {
+    font-size: 1.2rem;
+}
+
+.change-icon.up {
+    color: #2ecc71;
+}
+
+.change-icon.down {
+    color: #c0392b;
+}
+
+/* Chart Container */
+.chart-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    background-color: #132222;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3 {
+    margin: 0 0 1rem 0;
+    color: #316064;
+    font-size: 1.1rem;
+}
+
+/* Comparison Section */
+.comparison-section {
+    background-color: #132222;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.comparison-section h3 {
+    margin: 0 0 1rem 0;
+    color: #316064;
+    font-size: 1.1rem;
+}
+
+/* Category Breakdown */
+.category-breakdown {
+    background-color: #132222;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.category-breakdown h3 {
+    margin: 0 0 1rem 0;
+    color: #316064;
+    font-size: 1.1rem;
+}
+
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #1c3638;
+    border-radius: 4px;
+    color: white;
+}
+
+.category-name {
+    font-weight: 500;
+}
+
+.category-amount {
+    color: #316064;
+}
+
+/* Expense List */
+.expense-list {
+    background-color: #132222;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.expense-list h3 {
+    margin: 0 0 1rem 0;
+    color: #316064;
+    font-size: 1.1rem;
+}
+
+.list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.list th,
+.list td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #316064;
+    color: white;
+}
+
+.list th {
+    background-color: #1c3638;
+    font-weight: 500;
+    color: #316064;
+}
+
+.list tr:last-child td {
+    border-bottom: none;
+}
+
+/* Money Values */
+.money {
+    font-family: 'Courier New', monospace;
+}
+
+.money-plus {
+    color: #2ecc71;
+}
+
+.money-minus {
+    color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chart-container {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+} 

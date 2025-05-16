@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses Tracker - Analytics</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/analytics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="main_container">
+        <div class="navbar">
+            <div class="navlogo">
+                <img class="navsvg" src="img/exptracker.svg" alt="">
+                <img class="navsvglogo" src="img/logo2.svg" alt="">
+            </div>
+            <nav class="_nav">
+                <ul class="menu">
+                    <li><a href="index.html">Dashboard</a></li>
+                    <li class="active"><a href="analytics.html">Analytics</a></li>
+                    <li><a href="accounts.html">Accounts</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="menuwire">
+            <div class="heading">
+                <h2>Expense Analytics</h2>
+            </div>
+
+            <div class="filters-section">
+                <div class="time-period-selector">
+                    <button class="period-btn" data-period="week">Week</button>
+                    <button class="period-btn" data-period="month">Month</button>
+                    <button class="period-btn" data-period="year">Year</button>
+                    <button class="period-btn active" data-period="all">All Time</button>
+                </div>
+
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="dateRange">Date Range:</label>
+                        <select id="dateRange" class="form-control">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group" id="customDateRange" style="display: none;">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" class="form-control">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" class="form-control">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="category">Category:</label>
+                        <select id="category" class="form-control">
+                            <option value="all">All Categories</option>
+                            <option value="food">Food</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Expenses</h3>
+                        <p class="stat-value money money-minus" id="totalExpenses">₹0.00</p>
+                        <div class="stat-change" id="totalChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Average Daily</h3>
+                        <p class="stat-value money money-minus" id="averageDaily">₹0.00</p>
+                        <div class="stat-change" id="averageChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Highest Category</h3>
+                        <p class="stat-value" id="highestCategory">-</p>
+                        <div class="stat-change" id="categoryChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3>Savings Rate</h3>
+                        <p class="stat-value money money-plus" id="savingsRate">0%</p>
+                        <div class="stat-change" id="savingsChange">
+                            <span class="change-icon">↑</span>
+                            <span class="change-value">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <h3>Expense Distribution</h3>
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Daily Expenses Trend</h3>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="comparison-section">
+                    <h3>Period Comparison</h3>
+                    <div class="comparison-chart">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="category-breakdown">
+                    <h3>Category Breakdown</h3>
+                    <div class="category-list" id="categoryList">
+                        <!-- Category items will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="expense-list">
+                    <h3>Detailed Expenses</h3>
+                    <table id="expenseTable" class="list">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenseTableBody">
+                            <!-- Table content will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/expense-analytics.js"></script>
+</body>
+</html> 

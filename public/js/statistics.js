@@ -24,7 +24,7 @@ const categoryListElement = document.getElementById('categoryList');
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
-    updateStatistics('week');
+    updateStatistics('all');
 });
 
 function setupEventListeners() {

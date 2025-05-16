@@ -4,7 +4,7 @@
 let accounts = [];
 let transactions = [];
 let userId = localStorage.getItem('userId');
-let defcur = localStorage.getItem('defaultCurrency')
+let defcur = localStorage.getItem('defaultCurrency') ||  'INR';
 let baseCurrency = 'INR';
 
 // Utility functions
@@ -78,6 +78,7 @@ async function fetchData() {
 
 // Update account summary cards
 function updateAccountSummary(summary) {
+    console.log("summary : ",summary)
     document.getElementById('totalBalance').textContent = formatCurrency(convertCurrency(summary.totalBalance,baseCurrency, defcur,summary,transactions,summary.sig ), defcur);
     document.getElementById('totalIncome').textContent = formatCurrency(convertCurrency(summary.totalIncome,baseCurrency, defcur,summary,transactions,summary.sig ), defcur);
     document.getElementById('totalExpenses').textContent = formatCurrency( convertCurrency(summary.totalExpenses,baseCurrency, defcur,summary,transactions,summary.sig ), defcur);
@@ -368,8 +369,12 @@ async function addAccount() {
     const type = prompt('Enter account type (cash/bank/credit):');
     if (!type) return;
 
-    const bal = parseFloat(prompt(`Enter initial balance in ${defcur} :`));
-    if (isNaN(bal)) return;
+    let bal = parseFloat(prompt(`Enter initial balance in ${defcur} :`));
+    if (isNaN(bal)){ 
+        bal = 0;
+        console.log(bal)
+        // return;
+    }
     let balance = defcur == 'INR'? bal : convertCurrency(bal, defcur,baseCurrency,transactions.transaction,transactions,'+' )
 
     try {
@@ -430,7 +435,10 @@ async function editAccount(id) {
     if (!type) return;
 
     const balance = parseFloat(prompt('Enter new balance:', account.balance));
-    if (isNaN(balance)) return;
+    if (isNaN(balance)){
+        balance = 0;
+        console.log(balance)
+    }
 
     try {
         const response = await fetch(`http://localhost:3000/api/accounts/${id}`, {

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log("++ DOMContentLoaded event fired ++ (settings.js)");
     // Load currency settings
     const savedCurrency = localStorage.getItem('selectedCurrency') ||  'INR' ;
-    document.getElementById('default-currency').value = savedCurrency;
+    document.getElementById('default-currency').value = savedCurrency ||  'INR';
     // document.getElementById('currency-select').value = savedCurrency;
     console.log(savedCurrency)
     updateRates()
@@ -37,10 +37,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 function updateRates() {
     let rates1 = JSON.parse(localStorage.getItem('exchangeRates'));
     let rates2 = fallbackRates;
-    console.log('current rates: ', rates1.INR)
-    console.log('current rates: ', rates1)
-    console.log('current fallbackrates: ', rates2.INR)
-    if (rates1.INR !== rates2.INR){
+    // console.log('current rates: ', rates1.INR)
+    // console.log('current rates: ', rates1)
+    console.log('current fallbackrate INR: ', rates2.INR)
+    if( rates1 == null){
+        console.log('null rates')
+        localStorage.setItem('exchangeRates', JSON.stringify(fallbackRates));
+        console.log(localStorage.getItem('exchangeRates'))
+
+    }
+    if (rates1.INR !== rates2.INR ){
         localStorage.setItem('exchangeRates', JSON.stringify(fallbackRates));
         console.log(localStorage.getItem('exchangeRates'))
     }
