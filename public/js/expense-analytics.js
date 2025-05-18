@@ -10,10 +10,7 @@ let trendChart;
 let comparisonChart;
 
 // DOM Elements
-const dateRangeSelect = document.getElementById('dateRange');
-const customDateRange = document.getElementById('customDateRange');
-const startDateInput = document.getElementById('startDate');
-const endDateInput = document.getElementById('endDate');
+const transactionTypeSelect = document.getElementById('transactionType');
 const categorySelect = document.getElementById('category');
 const periodButtons = document.querySelectorAll('.period-btn');
 const totalExpensesElement = document.getElementById('totalExpenses');
@@ -43,16 +40,26 @@ async function loadTransactions() {
         if (!response.ok) throw new Error('Failed to fetch transactions');
         
         const transactions = await response.json();
-        expenses = transactions.filter(tx => tx.amount < 0); // Only get expenses
+        expenses = transactions; // Store all transactions
         console.log('Loaded transactions:', expenses);
+        updateCategoryOptions(); // Update category options after loading transactions
     } catch (error) {
         console.error('Error loading transactions:', error);
     }
 }
 
 function setupEventListeners() {
-    // Date range select handler
-    dateRangeSelect.addEventListener('change', handleDateRangeChange);
+    // Transaction type select handler
+    transactionTypeSelect.addEventListener('change', () => {
+        updateCategoryOptions();
+        updateAnalytics('all');
+    });
+    
+    // Category select handler
+    categorySelect.addEventListener('change', () => {
+        const activePeriod = document.querySelector('.period-btn.active').dataset.period;
+        updateAnalytics(activePeriod);
+    });
     
     // Period buttons handler
     periodButtons.forEach(button => {
@@ -64,24 +71,45 @@ function setupEventListeners() {
     });
 }
 
-function handleDateRangeChange() {
-    if (dateRangeSelect.value === 'custom') {
-        customDateRange.style.display = 'flex';
-    } else {
-        customDateRange.style.display = 'none';
+function updateCategoryOptions() {
+    const transactionType = transactionTypeSelect.value;
+    
+    // Clear existing options except "All Categories"
+    while (categorySelect.options.length > 1) {
+        categorySelect.remove(1);
     }
+
+    // Get unique categories based on transaction type
+    const categories = new Set();
+    expenses.forEach(tx => {
+        if (transactionType === 'expenses' && tx.amount < 0) {
+            categories.add(tx.text);
+        } else if (transactionType === 'income' && tx.amount > 0) {
+            categories.add(tx.text);
+        } else if (transactionType === 'both') {
+            categories.add(tx.text);
+        }
+    });
+
+    // Add category options
+    Array.from(categories).sort().forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    });
 }
 
 function updateAnalytics(period) {
-    const filteredExpenses = filterExpenses(period);
-    updateSummaryCards(filteredExpenses);
-    updateCharts(filteredExpenses, period);
-    updateCategoryBreakdown(filteredExpenses);
+    const filteredTransactions = filterTransactions(period);
+    updateSummaryCards(filteredTransactions);
+    updateCharts(filteredTransactions, period);
+    updateCategoryBreakdown(filteredTransactions);
     updateComparisonChart(period);
-    updateExpenseTable(filteredExpenses);
+    updateTransactionTable(filteredTransactions);
 }
 
-function filterExpenses(period) {
+function filterTransactions(period) {
     let filtered = [...expenses];
     
     // Filter by period
@@ -101,53 +129,72 @@ function filterExpenses(period) {
                 break;
         }
 
-        filtered = filtered.filter(expense => {
-            const expenseDate = new Date(expense.date);
-            return expenseDate >= startDate && expenseDate <= now;
+        filtered = filtered.filter(transaction => {
+            const transactionDate = new Date(transaction.date);
+            return transactionDate >= startDate && transactionDate <= now;
         });
     }
     
+    // Filter by transaction type
+    const transactionType = transactionTypeSelect.value;
+    if (transactionType === 'expenses') {
+        filtered = filtered.filter(tx => tx.amount < 0);
+    } else if (transactionType === 'income') {
+        filtered = filtered.filter(tx => tx.amount > 0);
+    }
+    
     // Filter by category if selected
-    if (categorySelect.value !== 'all') {
-        filtered = filtered.filter(expense => expense.text === categorySelect.value);
+    const selectedCategory = categorySelect.value;
+    if (selectedCategory !== 'all') {
+        filtered = filtered.filter(transaction => transaction.text === selectedCategory);
     }
     
     return filtered;
 }
 
-function updateSummaryCards(expenses) {
-    // Calculate total expenses
-    const total = expenses.reduce((sum, expense) => sum + Math.abs(expense.amount), 0);
-    totalExpensesElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(total, baseCurrency, defaultCurrency, expenses).toFixed(2)}`;
+function updateSummaryCards(transactions) {
+    const transactionType = transactionTypeSelect.value;
+    const isExpense = transactionType === 'expenses';
+    const isIncome = transactionType === 'income';
+    
+    // Calculate total
+    const total = transactions.reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+    totalExpensesElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(total, baseCurrency, defaultCurrency, transactions).toFixed(2)}`;
+    totalExpensesElement.className = `stat-value money ${isExpense ? 'money-minus' : 'money-plus'}`;
 
-    // Calculate average daily expenses
-    const days = new Set(expenses.map(e => e.date)).size;
+    // Calculate average daily
+    const days = new Set(transactions.map(tx => tx.date)).size;
     const average = days > 0 ? total / days : 0;
-    averageDailyElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(average, baseCurrency, defaultCurrency, expenses).toFixed(2)}`;
+    averageDailyElement.textContent = `${getCurrencySymbol(defaultCurrency)}${convertCurrency(average, baseCurrency, defaultCurrency, transactions).toFixed(2)}`;
+    averageDailyElement.className = `stat-value money ${isExpense ? 'money-minus' : 'money-plus'}`;
 
     // Find highest category
     const categoryTotals = {};
-    expenses.forEach(expense => {
-        categoryTotals[expense.text] = (categoryTotals[expense.text] || 0) + Math.abs(expense.amount);
+    transactions.forEach(tx => {
+        categoryTotals[tx.text] = (categoryTotals[tx.text] || 0) + Math.abs(tx.amount);
     });
 
     const highestCategory = Object.entries(categoryTotals)
         .reduce((max, [category, total]) => total > (max.total || 0) ? {category, total} : max, {});
 
     highestCategoryElement.textContent = highestCategory.category 
-        ? `${highestCategory.category} (${getCurrencySymbol(defaultCurrency)}${convertCurrency(highestCategory.total, baseCurrency, defaultCurrency, expenses).toFixed(2)})` 
+        ? `${highestCategory.category} (${getCurrencySymbol(defaultCurrency)}${convertCurrency(highestCategory.total, baseCurrency, defaultCurrency, transactions).toFixed(2)})` 
         : '-';
 
-    // Calculate savings rate (example: assuming income is ₹50000)
-    const income = 50000; // This should come from your actual data
-    const savingsRate = ((income - total) / income) * 100;
-    savingsRateElement.textContent = `${savingsRate.toFixed(1)}%`;
+    // Calculate savings rate (only for expenses)
+    if (isExpense) {
+        const income = 50000; // This should come from your actual data
+        const savingsRate = ((income - total) / income) * 100;
+        savingsRateElement.textContent = `${savingsRate.toFixed(1)}%`;
+    } else {
+        savingsRateElement.textContent = '-';
+    }
 
     // Update change indicators
-    updateChangeIndicators(expenses);
+    updateChangeIndicators(transactions);
 }
 
-function updateChangeIndicators(expenses) {
+function updateChangeIndicators(transactions) {
     // This is a simplified example. In a real application, you would compare with previous period
     const changes = {
         total: 5.2,
@@ -169,24 +216,29 @@ function updateChangeIndicators(expenses) {
     });
 }
 
-function updateCharts(expenses, period) {
-    updateDistributionChart(expenses);
-    updateTrendChart(expenses, period);
+function updateCharts(transactions, period) {
+    updateDistributionChart(transactions);
+    updateTrendChart(transactions, period);
 }
 
-function updateDistributionChart(expenses) {
+function updateDistributionChart(transactions) {
     const ctx = document.getElementById('distributionChart').getContext('2d');
     
     // Calculate category totals
     const categoryTotals = {};
-    expenses.forEach(expense => {
-        categoryTotals[expense.text] = (categoryTotals[expense.text] || 0) + Math.abs(expense.amount);
+    transactions.forEach(tx => {
+        categoryTotals[tx.text] = (categoryTotals[tx.text] || 0) + Math.abs(tx.amount);
     });
 
     // Destroy existing chart if it exists
     if (distributionChart) {
         distributionChart.destroy();
     }
+
+    const transactionType = transactionTypeSelect.value;
+    const chartTitle = transactionType === 'expenses' ? 'Expense Distribution' : 
+                      transactionType === 'income' ? 'Income Distribution' : 
+                      'Transaction Distribution';
 
     distributionChart = new Chart(ctx, {
         type: 'doughnut',
@@ -209,19 +261,23 @@ function updateDistributionChart(expenses) {
             plugins: {
                 legend: {
                     position: 'right'
+                },
+                title: {
+                    display: true,
+                    text: chartTitle
                 }
             }
         }
     });
 }
 
-function updateTrendChart(expenses, period) {
+function updateTrendChart(transactions, period) {
     const ctx = document.getElementById('trendChart').getContext('2d');
     
-    // Group expenses by date
+    // Group transactions by date
     const dailyTotals = {};
-    expenses.forEach(expense => {
-        dailyTotals[expense.date] = (dailyTotals[expense.date] || 0) + Math.abs(expense.amount);
+    transactions.forEach(tx => {
+        dailyTotals[tx.date] = (dailyTotals[tx.date] || 0) + Math.abs(tx.amount);
     });
 
     // Sort dates
@@ -232,14 +288,20 @@ function updateTrendChart(expenses, period) {
         trendChart.destroy();
     }
 
+    const transactionType = transactionTypeSelect.value;
+    const chartTitle = transactionType === 'expenses' ? 'Daily Expenses Trend' : 
+                      transactionType === 'income' ? 'Daily Income Trend' : 
+                      'Daily Transaction Trend';
+
     trendChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: sortedDates,
             datasets: [{
-                label: 'Daily Expenses',
+                label: chartTitle,
                 data: sortedDates.map(date => dailyTotals[date]),
-                borderColor: '#3498db',
+                borderColor: transactionType === 'expenses' ? '#e74c3c' : 
+                           transactionType === 'income' ? '#2ecc71' : '#3498db',
                 tension: 0.1,
                 fill: false
             }]
@@ -255,11 +317,11 @@ function updateTrendChart(expenses, period) {
     });
 }
 
-function updateCategoryBreakdown(expenses) {
+function updateCategoryBreakdown(transactions) {
     // Calculate category totals
     const categoryTotals = {};
-    expenses.forEach(expense => {
-        categoryTotals[expense.text] = (categoryTotals[expense.text] || 0) + Math.abs(expense.amount);
+    transactions.forEach(tx => {
+        categoryTotals[tx.text] = (categoryTotals[tx.text] || 0) + Math.abs(tx.amount);
     });
 
     // Clear existing items
@@ -269,9 +331,15 @@ function updateCategoryBreakdown(expenses) {
     Object.entries(categoryTotals).forEach(([category, total]) => {
         const item = document.createElement('div');
         item.className = 'category-item';
+        const transactionType = transactionTypeSelect.value;
+        const isExpense = transactionType === 'expenses';
+        const isIncome = transactionType === 'income';
+        
         item.innerHTML = `
             <span class="category-name">${category}</span>
-            <span class="category-amount">${getCurrencySymbol(defaultCurrency)}${convertCurrency(total, baseCurrency, defaultCurrency, expenses).toFixed(2)}</span>
+            <span class="category-amount ${isExpense ? 'money-minus' : isIncome ? 'money-plus' : ''}">
+                ${getCurrencySymbol(defaultCurrency)}${convertCurrency(total, baseCurrency, defaultCurrency, transactions).toFixed(2)}
+            </span>
         `;
         categoryListElement.appendChild(item);
     });
@@ -318,16 +386,19 @@ function updateComparisonChart(period) {
     });
 }
 
-function updateExpenseTable(expenses) {
+function updateTransactionTable(transactions) {
     expenseTableBody.innerHTML = '';
     
-    expenses.forEach(expense => {
+    transactions.forEach(tx => {
         const row = document.createElement('tr');
+        const isExpense = tx.amount < 0;
         row.innerHTML = `
-            <td>${expense.date}</td>
-            <td>${expense.text}</td>
-            <td>${expense.note || '-'}</td>
-            <td>${getCurrencySymbol(defaultCurrency)}${convertCurrency(Math.abs(expense.amount), baseCurrency, defaultCurrency, expenses).toFixed(2)}</td>
+            <td>${tx.date}</td>
+            <td>${tx.text}</td>
+            <td>${tx.note || '-'}</td>
+            <td class="${isExpense ? 'money-minus' : 'money-plus'}">
+                ${getCurrencySymbol(defaultCurrency)}${convertCurrency(Math.abs(tx.amount), baseCurrency, defaultCurrency, transactions).toFixed(2)}
+            </td>
         `;
         expenseTableBody.appendChild(row);
     });

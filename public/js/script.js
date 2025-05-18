@@ -1208,6 +1208,54 @@ async function fetchAccounts() {
         if (!response.ok) throw new Error('Failed to fetch accounts');
         
         accounts = await response.json();
+        console.log('accounts : ',accounts)
+        if (accounts.length == 0){
+          try {
+            const response = await fetch('http://localhost:3000/api/accounts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    name : 'personal',
+                    balance : 0,
+                    type: 'cash'
+                })
+            });
+    
+            if (!response.ok) throw new Error('Failed to create account');
+    
+            const data = await response.json();
+            accounts.push({ id: data.id, name: data.name , balance : data.balance, type:data.type });
+            // renderAccountsList();
+            // initializeCharts();
+    
+            // // Update total balance in index.html
+            // const balanceElement = document.getElementById('balance');
+            // if (balanceElement) {
+            //     const currentBalance = parseFloat(balanceElement.textContent.replace(/[^0-9.-]+/g, ''));
+            //     const newBalance = currentBalance + balance;
+            //     balanceElement.textContent = formatCurrency(newBalance);
+            // }
+    
+            // // Update income if initial balance is positive
+            // if (balance > 0) {
+            //     const incomeElement = document.getElementById('money-plus');
+            //     if (incomeElement) {
+            //         const currentIncome = parseFloat(incomeElement.textContent.replace(/[^0-9.-]+/g, ''));
+            //         const newIncome = currentIncome + balance;
+            //         incomeElement.textContent = formatCurrency(newIncome);
+            //     }
+            // }
+            await fetchData(); // Refresh all data including account summary
+            alert('Account created successfully!');
+            location.reload();
+        } catch (error) {
+            console.error('Error creating account:', error);
+            location.reload();
+        }
+        }
         populateAccountSelect();
     } catch (error) {
         console.error('Error fetching accounts:', error);
@@ -1227,7 +1275,7 @@ function populateAccountSelect() {
     accounts.forEach(account => {
         const option = document.createElement('option');
         option.value = account.id;
-        option.textContent = `${account.name} : (${formatCurrency(convertCurrency(account.balance,baseCurrency, defaultCurrency,account,transactions,account.sig ))})`;
+        option.textContent = `${account.name} (${account.type}) : ${formatCurrency(convertCurrency(account.balance,baseCurrency, defaultCurrency,account,transactions,account.sig ))}`;
         accountSelect.appendChild(option);
     });
 }

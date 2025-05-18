@@ -110,7 +110,7 @@
 /* Chart Container */
 .chart-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
     gap: 1.5rem;
     margin-bottom: 2rem;
 }
@@ -143,6 +143,10 @@
     font-size: 1.1rem;
 }
 
+.container{
+    justify-content: center;
+}
+
 /* Category Breakdown */
 .category-breakdown {
     background-color: #132222;
@@ -150,6 +154,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+    min-width: 326px;
 }
 
 .category-breakdown h3 {
@@ -187,6 +192,7 @@
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
 }
 
 .expense-list h3 {
