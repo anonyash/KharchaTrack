@@ -1,16 +1,22 @@
 /* Filters Section */
 .filters-section {
-    margin-bottom: 2rem;
+    display: flex;
+    gap: 27px;
+    width: -webkit-fill-available;
+    /* margin-bottom: 2rem; */
     padding: 1.5rem;
     background-color: #132222;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: space-evenly;
+    flex-direction: row-reverse;
 }
 
 .time-period-selector {
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
+    align-items: flex-end;
 }
 
 .period-btn {
@@ -145,6 +151,7 @@
 
 .container{
     justify-content: center;
+    margin: 0px;
 }
 
 /* Category Breakdown */
