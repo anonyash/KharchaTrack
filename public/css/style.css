@@ -172,7 +172,7 @@
     font-size: larger;
     font-weight: bold;
     /* background: #316064; */
-    padding: 10px;
+    /* padding: 10px; */
     text-align: center;
     align-content: center;
   }
@@ -227,7 +227,11 @@
 
 
   .menu a {
-    padding: 10px;
+    display: flex;
+        width: -webkit-fill-available;
+        align-items: center;
+        height: -webkit-fill-available;
+    padding: 20px;
     text-decoration: none;
     color: rgb(255, 255, 255);
     transition: color 0.3s ease;

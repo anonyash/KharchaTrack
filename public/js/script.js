@@ -100,7 +100,8 @@ if (!userId){
   let baseCurrency = 'INR'; //localStorage.getItem('defaultCurrency') ;  //'INR'; // The currency in which transactions are stored
   let transactionCurrency = document.getElementById('transaction-currency')
   transactionCurrency.value = defaultCurrency;
-  let sig2
+  // let sig2
+  let sig2 //= transactions.map((transaction) => transaction.sig);
   let categorytext = document.getElementsByClassName('categorytext')
   let category = document.getElementsByClassName("category")
   const bttn = document.getElementById('accntbtn');
@@ -175,6 +176,7 @@ if (!userId){
 
 
   function loadTransactionsForCurrentMonth() {
+    console.log('loadTransactionsForCurrentMonth() called')
     const month = currentDate.getMonth() + 1;
     const year = currentDate.getFullYear();
     // let userid = JSON.stringify(localStorage.getItem('userId'))
@@ -823,9 +825,11 @@ function updateChartData() {
 //shows list of transactions
 function updTransactionDOM(transaction) {
   console.log("updTransactionDOM() called");
+  console.log('sig2: ',sig2)
+
   
   //GET sign
-  let sign2 = sig2[0];
+  // let sign2 = sig2[0];
   const item = document.createElement("li");
   const list = document.getElementById('list')
 
@@ -916,6 +920,7 @@ function updTransactionDOM(transaction) {
     const income = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0);
     const expense = (amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1);
     let sig2 = transactions.map((transaction) => transaction.sig);
+    console.log('sig2: ',sig2)
 
     console.log("Calculated amounts:", { total, income, expense });
 
@@ -943,6 +948,7 @@ function updTransactionDOM(transaction) {
         list.appendChild(item);
     });
     console.log("updateAllAmounts completed");
+    console.log('sig2: ',sig2)
 }
 
 
@@ -1183,18 +1189,6 @@ function CategoryText(ncat,option,tcat,event){
 
   //3
   
-  //Init App
-  function Init() {
-    console.log(">Init() called");
-    list.innerHTML = "";
-    fetchAccounts().then(() => {
-        updateLocalStorage(); // Update localStorage after fetching accounts
-        updateBalanceDisplay();
-        updateValues();
-        transactions.forEach(updTransactionDOM);
-    });
-  }
-
  
 
 // Add account selection variables
@@ -1206,6 +1200,7 @@ async function fetchAccounts() {
     try {
         const response = await fetch(`http://localhost:3000/api/accounts?user_id=${userId}`);
         if (!response.ok) throw new Error('Failed to fetch accounts');
+        if (!userId) throw new Error('Failed to fetch accounts');
         
         accounts = await response.json();
         console.log('accounts : ',accounts)
@@ -1319,3 +1314,17 @@ async function updateBalanceDisplay() {
         console.error('Error updating balance display:', error);
     }
 }
+
+
+
+  //Init App
+  function Init() {
+    console.log(">Init() called");
+    list.innerHTML = "";
+    fetchAccounts().then(() => {
+        updateLocalStorage(); // Update localStorage after fetching accounts
+        updateBalanceDisplay();
+        updateValues();
+        transactions.forEach(updTransactionDOM);
+    });
+  }
