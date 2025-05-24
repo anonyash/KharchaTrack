@@ -240,20 +240,32 @@ function updateDistributionChart(transactions) {
                       transactionType === 'income' ? 'Income Distribution' : 
                       'Transaction Distribution';
 
+    let col =  transactionType === 'expenses' ? ['#e74c3c',
+                    '#ff7365',
+                    '#ff5c4b',
+                    '#a83d3d',
+                    '#ff2a2a',
+                    '#802323'] : 
+    transactionType === 'income' ? ['#2ecc71',
+                    '#1fdd70',
+                    '#00b44c',
+                    '#2e995b',
+                    '#427b5a',
+                    '#7fc39c'] : 
+                    ['#3498db',
+                        '#2ecc71',
+                        '#e74c3c',
+                        '#f1c40f',
+                        '#9b59b6',
+                        '#1abc9c'];
+
     distributionChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: Object.keys(categoryTotals),
             datasets: [{
                 data: Object.values(categoryTotals),
-                backgroundColor: [
-                    '#3498db',
-                    '#2ecc71',
-                    '#e74c3c',
-                    '#f1c40f',
-                    '#9b59b6',
-                    '#1abc9c'
-                ]
+                backgroundColor: col
             }]
         },
         options: {
