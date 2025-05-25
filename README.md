@@ -2,6 +2,26 @@
 
 **KharchaTrack** is a full stack web-based expense tracking application built to help users manage their daily expenses in a simple and effective way.
 
+
+## 📸 Preview
+
+
+<p align="center" ><b> Dashboard </b></p> 
+
+![localhost_3000_index html (1)](https://github.com/user-attachments/assets/b312dae4-391b-45bf-96f7-076817967637)
+---
+
+<p align="center" ><b> analytics </b></p>
+
+![localhost_3000_analytics html](https://github.com/user-attachments/assets/cd264a8d-d4a3-4752-818f-edebbcab608c)
+---
+
+<p align="center" ><b> accounts </b></p>
+
+![localhost_3000_accounts html](https://github.com/user-attachments/assets/d134e65f-2380-410c-a845-8e84223c79e2)
+
+
+
 ## 🚀 Features
 - 🔐 User authentication (Signup & Login)
 - ➕ Add new expenses
