@@ -94,7 +94,7 @@ npm install
 ```
 
 ### Configure Environment  
-Create a .env file in the root with the following:
+Create a .env file in the root with the following: 
 ```env
 PORT=3000
 JWT_SECRET=your_jwt_secret_here
@@ -110,6 +110,33 @@ For production:
 npm start
 ```
 **The app will be available at http://localhost:3000 (or the port defined in .env).**
+
+## 🛠️ Development Notes
+
+- **Console Logs for Debugging**  
+  This project contains multiple `console.log()` statements in both backend and frontend files.  
+  These were intentionally added to help trace app behavior during development.  
+  You can remove them or replace them with a logging library like [`winston`](https://www.npmjs.com/package/winston) or [`morgan`](https://www.npmjs.com/package/morgan) for cleaner output in production.
+
+- **Code Organization**  
+  The project is structured simply for clarity:
+  - `server.js`, `database.js`, and `config.js` are at the root.
+  - Routes are in the `/routes` folder.
+  - Middleware lives in `/middleware`.
+  - Static files are in `/public`.
+
+- **Security Notes**  
+  While authentication is implemented using `bcrypt` and `jsonwebtoken`, additional improvements could be made:
+  - Input validation (e.g., using `express-validator`)
+  - Rate limiting to prevent brute-force attacks
+  - CSRF protection and secure cookie handling
+  - HTTPS setup for production environments
+
+- **Database Reset**  
+  KharchaTrack uses SQLite.  
+  To reset your data, just delete the `mydb.db` file located in the `/db` folder.  
+  The database will be recreated automatically with the basic structure on next server start.
+
 
 
 ## 🔧 Future Improvements
