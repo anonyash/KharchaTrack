@@ -125,7 +125,9 @@ npm start
 <br><br>
 ---
 ```yaml
-This project was built as a personal initiative to learn full stack development by building something meaningful.
+This project was built as a personal initiative to learn full stack development
+by building something meaningful.
+
 Feedback and contributions are welcome!
 
 
