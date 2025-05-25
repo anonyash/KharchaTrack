@@ -3,29 +3,33 @@
 **KharchaTrack** is a full stack web-based expense tracking application built to help users manage their daily expenses in a simple and effective way.
 
 ## 🚀 Features
+- 🔐 User authentication (Signup & Login)
+- ➕ Add new expenses
+- 📜 View all expenses in a list
+- ❌ Delete specific expenses
+- 📊 Visualize expense summaries using Chart.js
+- 🌱 Minimal UI, built for simplicity and learning
 
-- User authentication (Signup & Login)
-- Add, view, and delete expenses
-- Track daily spending habits
-- Simple, intuitive interface
-- Built with lightweight technologies and no external dashboards
 
 ## 🛠️ Tech Stack
 
-**Frontend**  
-- HTML, CSS, JavaScript
+**Frontend**
+- HTML
+- CSS
+- JavaScript
 
-**Backend**  
-- Node.js with Express
+**Backend**
+- Node.js
+- Express.js
 
-**Database**  
+**Database**
 - SQLite
 
-**Other Tools**  
-- bcrypt (password hashing)  
-- jsonwebtoken (authentication)  
-- dotenv (environment configuration)  
-- Chart.js (visualization)
+**Other Tools**
+- `bcrypt` for secure password hashing
+- `jsonwebtoken` for session handling
+- `dotenv` for managing environment variables
+- `Chart.js` for data visualization
 
 ## 📁 Project Structure
 
