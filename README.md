@@ -31,6 +31,30 @@ web based expense tracker system
 
 ## 📁 Project Structure
 
+
+KharchaTrack/  
+└── KharchaTrack v0.1/  
+├── .env  
+├── .gitignore  
+├── config.js  
+├── database.js  
+├── package.json  
+├── package-lock.json  
+├── server.js  
+├── db/  
+│ └── mydb.db  
+├── middleware/  
+│ └── auth.js  
+├── public/  
+│ ├── index.html  
+│ ├── login.html  
+│ ├── signup.html  
+│ ├── style.css  
+│ └── script.js  
+└── routes/  
+├── auth.js  
+└── expenses.js  
+
 <br><br><br><br>
 
 
