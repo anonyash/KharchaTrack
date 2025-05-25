@@ -1,6 +1,4 @@
 # KharchaTrack
-web based expense tracker system
-
 
 **KharchaTrack** is a full stack web-based expense tracking application built to help users manage their daily expenses in a simple and effective way.
 
@@ -55,25 +53,29 @@ KharchaTrack/
 ├── auth.js  
 └── expenses.js  
 
-<br><br><br><br>
 
-
-
-
-
-## 🧑‍💻 Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js & npm installed
+- Node.js installed (version 16+ recommended)
+- Git installed
 
 ### Installation
 
 ```bash
 git clone https://github.com/anonyash/KharchaTrack.git
-cd KharchaTrack
+cd "KharchaTrack/KharchaTrack v0.1"
 npm install
 ```
+
+### Configure Environment  
+Create a .env file in the root with the following:
+```env
+PORT=3000
+JWT_SECRET=your_jwt_secret_here
+```
+
 Running the App
 For development (auto-restarts on changes):
 ```bash
@@ -86,12 +88,23 @@ npm start
 **The app will be available at http://localhost:3000 (or the port defined in .env).**
 
 
+## 🔧 Future Improvements
+- Expense categories and filters
+- Monthly/weekly summaries
+- User profile settings
+- Responsive/mobile-friendly UI
+- Dark mode
 
+## 📜 License  
+**This project is licensed under the ISC License.**
 
 <br><br>
+---
 ```yaml
 This project was built as a personal initiative to learn full stack development by building something meaningful.
 Feedback and contributions are welcome!
 
-Made with 💻 by Yashvardhan Rajpurohit
+
+
+                                       Made with ☕👩🏻‍💻 by Yashvardhan Rajpurohit
 ```
