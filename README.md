@@ -1,4 +1,4 @@
-# KharchaTrack
+# <p align="center" ><b> KharchaTrack </b></p> 
 
 **KharchaTrack** is a full stack web-based expense tracking application built to help users manage their daily expenses in a simple and effective way.
 
