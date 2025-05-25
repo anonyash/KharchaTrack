@@ -134,6 +134,8 @@ npm start
 
 - **Database Reset**  
   KharchaTrack uses SQLite.  
+  (you can download a DB browser with UI to view the database)
+    
   To reset your data, just delete the `mydb.db` file located in the `/db` folder.  
   The database will be recreated automatically with the basic structure on next server start.
 
